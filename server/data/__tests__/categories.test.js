@@ -9,6 +9,7 @@ const sampleCategories = [
   { name: "Giày" },
   { name: "Dây" },
 ];
+
 let createdSampleCategories = [];
 
 beforeEach(async () => {
@@ -23,9 +24,7 @@ beforeEach(async () => {
 
 describe("creating category", () => {
   test("with all parameters should succeed", async () => {
-    const newItem = {
-      name: "Dây",
-    };
+    const newItem = { name: "Dây" };
     const createdItem = await db.categories.create(newItem);
 
     expect(createdItem._id).toBeInstanceOf(mongoose.Types.ObjectId);

@@ -3,19 +3,21 @@ import { Category } from "./models/index.js";
 const db = {
   categories: {
     getAll: async () => {
-      const items = await Category.find();
-      return items;
+      return await Category.find();
     },
     create: async ({ name }) => {
-      const created = await Category.create({
-        name: name,
-      });
-      return created;
+      return await Category.create({ name });
     },
     findById: async (id) => {
-      const item = await Category.findById(id);
+      return await Category.findById(id);
     },
-  }, 
+    deleteById: async (id) => {
+      return await Category.findByIdAndDelete(id);
+    },
+    updateById: async (id, input) => {
+      return await Category.findByIdAndUpdate(id, input, { new: true });
+    }
+  },
 };
 
 export { db };
