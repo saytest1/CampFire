@@ -1,0 +1,11 @@
+{
+  "customizations": {
+    "codespaces": {
+      "repositories": {
+        "Suppleo/Fluffy-Unicorns---Hotel-Management-Web-App": {
+          "permissions": "write-all"
+        }
+      }
+    }
+  }
+}
