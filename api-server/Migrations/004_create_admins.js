@@ -1,3 +1,4 @@
+// migrations/004_create_admins.js
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('admins', {
