@@ -1,52 +1,44 @@
-var restify = require('restify');
-var jwt = require('jsonwebtoken');
-var format = require('pg-format');
-var Router = require('restify-router').Router;
-var router = new Router();
-var server = restify.createServer();
+// Import thư viện cần thiết
+const restify = require('restify');
+const Router = require('restify-router').Router;
 const path = require('path');
+const corsMiddleware = require('restify-cors-middleware2');
 
-const { Client } = require('pg');
-var corsMiddleware = require('restify-cors-middleware2');
+// Khởi tạo server Restify
+const server = restify.createServer();
 
-var cors = corsMiddleware({
+// Cấu hình CORS
+const cors = corsMiddleware({
     preflightMaxAge: 5,
     origins: ['*'],
-    allowHeaders:['X-App-Version'],
-    exposeHeaders:[]
+    allowHeaders: ['X-App-Version'],
+    exposeHeaders: []
 });
 
+// Áp dụng middleware
 server.pre(cors.preflight);
 server.use(cors.actual);
-server.use(restify.plugins.bodyParser({ mapParams: true })); // POST params
-server.use(restify.plugins.queryParser()); // GET query
+server.use(restify.plugins.bodyParser({ mapParams: true }));
+server.use(restify.plugins.queryParser());
 
+// Phục vụ file tĩnh (uploads)
 server.get('/api/uploads/*', restify.plugins.serveStatic({
     directory: path.join(__dirname, 'uploads'),
-    appendRequestPath: false, // Prevents duplicating paths
+    appendRequestPath: false,
 }));
 
+// Import các route mới cho hệ thống bán dụng cụ cắm trại
 const root = require('./routes/root');
-const room = require('./routes/room');
-const customer = require('./routes/customer');
-const booking = require('./routes/booking');
-const account = require('./routes/account');
-const service = require('./routes/service');
-const payment_card = require('./routes/payment_card');
-const guest = require('./routes/guest');
-const payment = require('./routes/payment');
+const categories = require('./routes/categories');
+const products = require('./routes/products');
 
+// Áp dụng các route vào server
 root.applyRoutes(server);
-room.applyRoutes(server);
-customer.applyRoutes(server);
-booking.applyRoutes(server);
-account.applyRoutes(server);
-service.applyRoutes(server);
-payment_card.applyRoutes(server);
-guest.applyRoutes(server);
-payment.applyRoutes(server);
+categories.applyRoutes(server);
+products.applyRoutes(server);
 
-var PORT = 8080;
-server.listen(PORT, function() {
+// Khởi động server
+const PORT = 8080;
+server.listen(PORT, function () {
     console.log('%s listening at %s', server.name, server.url);
 });

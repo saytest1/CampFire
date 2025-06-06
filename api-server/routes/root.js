@@ -1,25 +1,9 @@
 var Router = require('restify-router').Router;
-const router = new Router();
-var {getPgClient} = require('../models/db');
+var router = new Router();
 
-router.get('/api/', async (req, res) => {
-    const client = getPgClient();
-
-    var db_info = "Database is up & running";
-    try {
-        await client.connect();
-    } catch (e)
-    {
-        db_info = "Cannot connect to database!";
-        console.log(e);
-    } finally {
-        await client.end();
-    }
-
-    res.send( {
-        Server: "Server is working",
-        Database: db_info
-    });
+router.get('/', function(req, res, next) {
+    res.send({ message: 'API Server is running' });
+    return next();
 });
 
 module.exports = router;
