@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const { Product, Category } = require('../models');
-const { authenticateToken, authorizeAdmin } = require('../middlewares/auth');
+const { authenticateToken, authorizeAdmin } = require('../middleware/authenticate');
 
 // GET /products
 router.get('/', async (req, res) => {

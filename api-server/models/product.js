@@ -1,55 +1,17 @@
-// models/product.js
-const { DataTypes } = require('sequelize');
-const sequelize = require('../models/index').sequelize;
-const Category = require('./category'); 
-const Admin = require('./admin');      
-
-const Product = sequelize.define('Product', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  categoryId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    field: 'category_id',
-    references: {
-      model: 'categories',
-      key: 'id'
+module.exports = (sequelize, DataTypes) => {
+  const Product = sequelize.define('Product', {
+    name: DataTypes.STRING,
+    description: DataTypes.TEXT,
+    price: DataTypes.FLOAT,
+    stock_quantity: DataTypes.INTEGER,
+    image_url: DataTypes.STRING,
+    is_active: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
     },
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
-  },
+    category_id: DataTypes.INTEGER,
+    admin_id: DataTypes.INTEGER
+  });
 
-  adminId: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    field: 'admin_id',
-    references: {
-      model: 'admins',
-      key: 'id'
-    },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
-  }
-}, {
-  tableName: 'products',
-  timestamps: false
-});
-
-Product.belongsTo(Category, {
-  foreignKey: 'categoryId',
-  as: 'category'
-});
-
-Product.belongsTo(Admin, {
-  foreignKey: 'adminId',
-  as: 'admin'
-});
-
-module.exports = Product;
+  return Product;
+};

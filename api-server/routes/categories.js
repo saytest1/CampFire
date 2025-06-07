@@ -2,8 +2,8 @@
 
 const express = require('express');
 const router = express.Router();
-const { Category } = require('../models');
-const { authenticateToken, authorizeAdmin } = require('../middlewares/auth');
+const { Category } = require('../models/category');
+const { authenticateToken, authorizeAdmin } = require('./middleware/authenticate');
 
 // GET /categories
 router.get('/', async (req, res) => {
