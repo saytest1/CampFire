@@ -1,7 +1,7 @@
 // api-server/middlewares/auth.js
 
 const jwt = require('jsonwebtoken');
-const { Admin } = require('../models'); 
+const { Admin } = require('../../models'); 
 const SECRET_KEY = process.env.JWT_SECRET || 'YOUR_SECRET_KEY';
 
 async function authenticateToken(req, res, next) {

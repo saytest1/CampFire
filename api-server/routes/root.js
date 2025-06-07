@@ -1,9 +1,10 @@
-var Router = require('restify-router').Router;
-var router = new Router();
+// routes/root.js
 
-router.get('/', function(req, res, next) {
-    res.send({ message: 'API Server is running' });
-    return next();
+const express = require('express');
+const router = express.Router();
+
+router.get('/', (req, res) => {
+  res.json({ message: 'API Server is running' });
 });
 
 module.exports = router;

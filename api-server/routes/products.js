@@ -1,9 +1,7 @@
-// api-server/routes/productRoutes.js
-
 const express = require('express');
 const router = express.Router();
-const { Product, Category } = require('../models');
-const { authenticateToken, authorizeAdmin } = require('../middleware/authenticate');
+const { Product, Category, Admin } = require('../models');
+const { authenticateToken, authorizeAdmin } = require('./middleware/authenticate'); // ✅ Đường dẫn đúng
 
 // GET /products
 router.get('/', async (req, res) => {
@@ -11,7 +9,7 @@ router.get('/', async (req, res) => {
     const products = await Product.findAll({
       include: [
         { model: Category, as: 'category' },
-        { model: require('../models').Admin, as: 'admin', attributes: ['id', 'username', 'email'] }
+        { model: Admin, as: 'admin', attributes: ['id', 'username', 'email'] }
       ]
     });
     return res.json(products);
@@ -28,7 +26,7 @@ router.get('/:id', async (req, res) => {
     const product = await Product.findByPk(id, {
       include: [
         { model: Category, as: 'category' },
-        { model: require('../models').Admin, as: 'admin', attributes: ['id', 'username'] }
+        { model: Admin, as: 'admin', attributes: ['id', 'username'] }
       ]
     });
     if (!product) {
@@ -88,13 +86,13 @@ router.put(
       }
 
       await product.update({
-        name: name !== undefined ? name : product.name,
-        description: description !== undefined ? description : product.description,
-        price: price !== undefined ? price : product.price,
-        stock_quantity: stock_quantity !== undefined ? stock_quantity : product.stock_quantity,
-        category_id: category_id !== undefined ? category_id : product.category_id,
-        image_url: image_url !== undefined ? image_url : product.image_url,
-        is_active: is_active !== undefined ? is_active : product.is_active,
+        name: name ?? product.name,
+        description: description ?? product.description,
+        price: price ?? product.price,
+        stock_quantity: stock_quantity ?? product.stock_quantity,
+        category_id: category_id ?? product.category_id,
+        image_url: image_url ?? product.image_url,
+        is_active: is_active ?? product.is_active,
         admin_id: req.admin.id
       });
 
