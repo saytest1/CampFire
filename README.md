@@ -11,3 +11,15 @@ Welcome to **CampFire** – Your Ultimate Outdoor Gear Destination!
 - Cao Sỹ Siêu 2201700170
 
 ## Project Github Link: [https://github.com/saintsl4y3r/CampFire](https://github.com/saintsl4y3r/CampFire)
+
+## How to run server:
+1. Open project.
+2. Open new Terminal
+3. cd api-server
+4. type: `npm run dev`
+
+## How to run front-end:
+1. Open project.
+2. Open new Terminal
+3. cd frontend-react
+4. type: `npm start`
