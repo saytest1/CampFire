@@ -1,17 +1,18 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material';
+
+// Pages
 import StartPage from './pages/StartPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
-import RoomDetail from './pages/RoomDetail';
 import BookingForm from './pages/BookingForm';
-import BookingList from './pages/BookingList';
-import BookingDetail  from './pages/BookingDetail';
 import PaymentForm from './pages/PaymentForm';
-import ServiceList from './pages/ServiceList';
-import ServiceForm from './pages/ServiceForm';
+import Categories from './pages/Categories';
+import EquipmentDetail from './pages/EquipmentDetail';
+import Cart from './pages/Cart';
+import MyRentals from './pages/MyRentals';
 
 const theme = createTheme({
   palette: {
@@ -33,14 +34,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/room/:id" element={<RoomDetail />} />
-          <Route path="/booking/new/:roomId" element={<BookingForm />} />
-          <Route path="/bookings" element={<BookingList />} />
-          <Route path="/booking/:id" element={<BookingDetail />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/categories/:id" element={<EquipmentDetail />} />
+          <Route path="/booking/new/:equipmentId" element={<BookingForm />} />
           <Route path="/booking/:id/pay" element={<PaymentForm />} />
-          <Route path="/services" element={<ServiceList />} />
-          <Route path="/services/new" element={<ServiceForm />} />
-          <Route path="/services/edit/:id" element={<ServiceForm />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/myrentals" element={<MyRentals />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

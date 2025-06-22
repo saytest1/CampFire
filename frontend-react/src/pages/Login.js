@@ -6,7 +6,7 @@ import axios from 'axios';
 function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
   const [error, setError] = useState('');
@@ -21,10 +21,10 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://10.11.10.13/api/login', formData);
-      if (response.data.success) {
-        localStorage.setItem('token', response.data.token);
-        sessionStorage.setItem('customerId', response.data.customerID);
+      const response = await axios.post('http://localhost:8080/login', formData); // ⚠️ chỉnh URL nếu cần
+
+      // Nếu login thành công
+      if (response.status === 200) {
         navigate('/dashboard');
       }
     } catch (err) {
@@ -40,21 +40,25 @@ function Login() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          gap: 3
+          gap: 3,
+          textAlign: 'center',
         }}
       >
-        <Typography variant="h4" component="h1" align="center" gutterBottom>
-          Login to The Conjuring
+        <Typography variant="h4" component="h1" color="primary" fontWeight="bold">
+          CampReady Rentals
         </Typography>
-        
+        <Typography variant="subtitle1" color="text.secondary">
+          Sign in to rent your camping essentials!
+        </Typography>
+
         {error && <Alert severity="error">{error}</Alert>}
 
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
             fullWidth
-            label="Username"
-            name="username"
-            value={formData.username}
+            label="Email"
+            name="email"
+            value={formData.email}
             onChange={handleChange}
             margin="normal"
             required
@@ -73,6 +77,7 @@ function Login() {
             type="submit"
             fullWidth
             variant="contained"
+            color="primary"
             sx={{ mt: 3, mb: 2 }}
           >
             Login
@@ -82,7 +87,7 @@ function Login() {
             variant="text"
             onClick={() => navigate('/')}
           >
-            Back to Home
+            ⬅ Back to Home
           </Button>
         </Box>
       </Box>

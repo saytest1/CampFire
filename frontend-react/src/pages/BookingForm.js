@@ -1,250 +1,394 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import {
-    Box, Container, Paper, Typography, TextField, Button, Grid, 
-    IconButton, Divider, Stack, RadioGroup, FormControlLabel, Radio
+    Box,
+    Container,
+    Grid,
+    Card,
+    CardContent,
+    Typography,
+    TextField,
+    Button,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    Stack,
+    Divider,
+    Alert,
+    Chip,
+    List,
+    ListItem,
+    ListItemText
 } from '@mui/material';
-import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
-
-const initialGuestForm = {
-    FirstName: '',
-    MiddleName: '',
-    LastName: '',
-    DateOfBirth: null,
-    IDNumber: '',
-    GuardianIDNumber: ''
-};
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { useParams, useNavigate } from 'react-router-dom';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import PersonIcon from '@mui/icons-material/Person';
+import PaymentIcon from '@mui/icons-material/Payment';
 
 const BookingForm = () => {
+    const { equipmentId } = useParams();
     const navigate = useNavigate();
-    const customerId = sessionStorage.getItem('customerId');
-    const { state } = useLocation();
-    const { room } = state;
-    
-    const [guestForms, setGuestForms] = useState([{ ...initialGuestForm }]);
-    const [existingBookings, setExistingBookings] = useState([]);
-    const [selectedBooking, setSelectedBooking] = useState('new');
+    const [equipment, setEquipment] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        startDate: null,
+        endDate: null,
+        quantity: 1,
+        customerName: '',
+        customerEmail: '',
+        customerPhone: '',
+        specialRequests: '',
+        deliveryOption: 'pickup',
+        deliveryAddress: ''
+    });
+    const [errors, setErrors] = useState({});
+    const [totalCost, setTotalCost] = useState(0);
+    const [rentalDays, setRentalDays] = useState(0);
 
     useEffect(() => {
-        const fetchExistingBookings = async () => {
-            const response = await fetch(`http://10.11.10.13/api/booking/customer/${customerId}`);
-            const result = await response.json();
-            if (result.success) {
-                const confirmedBookings = result.data.filter(booking => 
-                    booking.Status === 'Confirmed' && booking.PaymentStatus === 'Unpaid'
-                );
-                setExistingBookings(confirmedBookings);
+        const fetchEquipment = async () => {
+            try {
+                const response = await fetch(`http://10.11.10.13/api/equipment/${equipmentId}`);
+                const data = await response.json();
+                if (data.success) {
+                    setEquipment(data.data);
+                }
+            } catch (error) {
+                console.error('Error fetching equipment:', error);
             }
         };
-        fetchExistingBookings();
-    }, [customerId]);
+        if (equipmentId) {
+            fetchEquipment();
+        }
+    }, [equipmentId]);
 
-    const handleAddGuest = () => {
-        if (guestForms.length < room.MaxOccupancy) {
-            setGuestForms([...guestForms, { ...initialGuestForm }]);
+    useEffect(() => {
+        if (formData.startDate && formData.endDate && equipment) {
+            const days = Math.ceil((formData.endDate - formData.startDate) / (1000 * 60 * 60 * 24));
+            if (days > 0) {
+                setRentalDays(days);
+                const subtotal = days * formData.quantity * equipment.DailyRate;
+                const deliveryFee = formData.deliveryOption === 'delivery' ? 25 : 0;
+                setTotalCost(subtotal + deliveryFee);
+            }
+        }
+    }, [formData.startDate, formData.endDate, formData.quantity, formData.deliveryOption, equipment]);
+
+    const handleInputChange = (field, value) => {
+        setFormData(prev => ({
+            ...prev,
+            [field]: value
+        }));
+        // Clear error when user starts typing
+        if (errors[field]) {
+            setErrors(prev => ({
+                ...prev,
+                [field]: ''
+            }));
         }
     };
 
-    const handleRemoveGuest = (index) => {
-        const newForms = guestForms.filter((_, i) => i !== index);
-        setGuestForms(newForms);
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!formData.startDate) newErrors.startDate = 'Start date is required';
+        if (!formData.endDate) newErrors.endDate = 'End date is required';
+        if (formData.startDate && formData.endDate && formData.startDate >= formData.endDate) {
+            newErrors.endDate = 'End date must be after start date';
+        }
+        if (!formData.customerName.trim()) newErrors.customerName = 'Name is required';
+        if (!formData.customerEmail.trim()) newErrors.customerEmail = 'Email is required';
+        if (!formData.customerPhone.trim()) newErrors.customerPhone = 'Phone is required';
+        if (formData.deliveryOption === 'delivery' && !formData.deliveryAddress.trim()) {
+            newErrors.deliveryAddress = 'Delivery address is required';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
-    const handleGuestChange = (index, field, value) => {
-        const newForms = [...guestForms];
-        newForms[index] = { ...newForms[index], [field]: value };
-        setGuestForms(newForms);
-    };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        if (!validateForm()) return;
 
-    const handleSubmit = async () => {
+        setLoading(true);
         try {
-            let bookingId;
-            
-            if (selectedBooking === 'new') {
-                // Create new booking
-                const bookingResponse = await fetch('http://10.11.10.13/api/bookinginitial', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ CustomerID: customerId })
-                });
-                const bookingResult = await bookingResponse.json();
-                bookingId = bookingResult.data.BookingID;
+            const bookingData = {
+                equipmentId: equipment.EquipmentID,
+                ...formData,
+                totalCost,
+                rentalDays,
+                status: 'pending'
+            };
+
+            const response = await fetch('http://10.11.10.13/api/bookings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(bookingData)
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                navigate('/payment', { state: { bookingId: result.bookingId, bookingData } });
             } else {
-                bookingId = selectedBooking;
+                setErrors({ submit: 'Failed to create booking. Please try again.' });
             }
-
-            // Create guests and booking details
-            for (const guestForm of guestForms) {
-                const guestResponse = await fetch('http://10.11.10.13/api/guests', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        CustomerID: customerId,
-                        ...guestForm
-                    })
-                });
-                const guestResult = await guestResponse.json();
-                
-                await fetch(`http://10.11.10.13/api/booking/${bookingId}/detail`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        RoomID: room.RoomID,
-                        GuestID: guestResult.data.GuestID
-                    })
-                });
-            }
-
-            navigate('/dashboard');
         } catch (error) {
-            console.error('Error creating booking:', error);
+            setErrors({ submit: 'Network error. Please try again.' });
+        } finally {
+            setLoading(false);
         }
     };
+
+    if (!equipment) {
+        return (
+            <Container maxWidth="md" sx={{ mt: 4, textAlign: 'center' }}>
+                <Typography>Loading equipment details...</Typography>
+            </Container>
+        );
+    }
 
     return (
-        <Container maxWidth="lg" sx={{ py: 4 }}>
-            <Paper elevation={3} sx={{ p: 3 }}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
                 <Typography variant="h4" gutterBottom>
-                    Book {room.TypeName} - Room {room.RoomNumber}
+                    Book Equipment
                 </Typography>
 
-                <Box sx={{ mb: 4 }}>
-                    <Typography variant="h6" gutterBottom>
-                        Select Booking Option
-                    </Typography>
-                    <RadioGroup
-                        value={selectedBooking}
-                        onChange={(e) => setSelectedBooking(e.target.value)}
-                    >
-                        <FormControlLabel 
-                            value="new" 
-                            control={<Radio />} 
-                            label="Create New Booking" 
-                        />
-                        {existingBookings.map(booking => (
-                            <FormControlLabel
-                                key={booking.BookingID}
-                                value={booking.BookingID.toString()}
-                                control={<Radio />}
-                                label={
-                                    <Box>
-                                        <Typography>
-                                            Booking #{booking.BookingID} ({booking.BookingDate.substring(0, 10)})
+                <Grid container spacing={4}>
+                    {/* Equipment Summary */}
+                    <Grid item xs={12} md={4}>
+                        <Card>
+                            <CardContent>
+                                <Typography variant="h6" gutterBottom>
+                                    Equipment Summary
+                                </Typography>
+                                <Box sx={{ mb: 2 }}>
+                                    <img 
+                                        src={equipment.images?.[0] || 'https://placeholder.com/200x150'} 
+                                        alt={equipment.Name}
+                                        style={{ width: '100%', borderRadius: 8 }}
+                                    />
+                                </Box>
+                                <Typography variant="h6">{equipment.Name}</Typography>
+                                <Typography color="text.secondary">{equipment.Brand}</Typography>
+                                <Chip 
+                                    label={equipment.Category} 
+                                    size="small" 
+                                    sx={{ mt: 1 }}
+                                />
+                                <Typography variant="h6" color="primary" sx={{ mt: 2 }}>
+                                    ${equipment.DailyRate}/day
+                                </Typography>
+                                
+                                {rentalDays > 0 && (
+                                    <Box sx={{ mt: 3 }}>
+                                        <Divider sx={{ mb: 2 }} />
+                                        <Typography variant="h6" gutterBottom>
+                                            Cost Breakdown
                                         </Typography>
-                                        {booking.guests && booking.guests.length > 0 && (
-                                            <Box sx={{ ml: 2, mt: 1 }}>
-                                                <Typography variant="subtitle2" color="text.secondary">
-                                                    Existing Guests:
+                                        <List dense>
+                                            <ListItem>
+                                                <ListItemText 
+                                                    primary={`${rentalDays} days × ${formData.quantity} items`}
+                                                    secondary={`$${equipment.DailyRate} per day`}
+                                                />
+                                                <Typography>${rentalDays * formData.quantity * equipment.DailyRate}</Typography>
+                                            </ListItem>
+                                            {formData.deliveryOption === 'delivery' && (
+                                                <ListItem>
+                                                    <ListItemText primary="Delivery Fee" />
+                                                    <Typography>$25</Typography>
+                                                </ListItem>
+                                            )}
+                                            <Divider />
+                                            <ListItem>
+                                                <ListItemText 
+                                                    primary="Total"
+                                                    primaryTypographyProps={{ variant: 'h6' }}
+                                                />
+                                                <Typography variant="h6" color="primary">
+                                                    ${totalCost}
                                                 </Typography>
-                                                {booking.guests.map((guest, idx) => (
-                                                    <Typography key={idx} variant="body2" color="text.secondary">
-                                                        • {guest.FirstName} {guest.LastName}
-                                                    </Typography>
-                                                ))}
-                                            </Box>
-                                        )}
+                                            </ListItem>
+                                        </List>
                                     </Box>
-                                }
-                            />
-                        ))}
-                    </RadioGroup>
-                </Box>
-                
-                {guestForms.map((guestForm, index) => (
-                    <Box key={index} sx={{ mb: 4 }}>
-                        <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 2 }}>
-                            <Typography variant="h6">Guest {index + 1}</Typography>
-                            {index > 0 && (
-                                <IconButton onClick={() => handleRemoveGuest(index)} color="error">
-                                    <RemoveIcon />
-                                </IconButton>
-                            )}
-                        </Stack>
-                        
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} md={4}>
-                                <TextField
-                                    fullWidth
-                                    label="First Name"
-                                    value={guestForm.FirstName}
-                                    onChange={(e) => handleGuestChange(index, 'FirstName', e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                                <TextField
-                                    fullWidth
-                                    label="Middle Name"
-                                    value={guestForm.MiddleName}
-                                    onChange={(e) => handleGuestChange(index, 'MiddleName', e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                                <TextField
-                                    fullWidth
-                                    label="Last Name"
-                                    value={guestForm.LastName}
-                                    onChange={(e) => handleGuestChange(index, 'LastName', e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                                <TextField
-                                    fullWidth
-                                    type="date"
-                                    label="Date of Birth"
-                                    value={guestForm.DateOfBirth || ''}
-                                    onChange={(e) => handleGuestChange(index, 'DateOfBirth', e.target.value)}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                                <TextField
-                                    fullWidth
-                                    label="ID Number"
-                                    value={guestForm.IDNumber}
-                                    onChange={(e) => handleGuestChange(index, 'IDNumber', e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                                <TextField
-                                    fullWidth
-                                    label="Guardian ID Number"
-                                    value={guestForm.GuardianIDNumber}
-                                    onChange={(e) => handleGuestChange(index, 'GuardianIDNumber', e.target.value)}
-                                />
-                            </Grid>
-                        </Grid>
-                        {index < guestForms.length - 1 && <Divider sx={{ my: 3 }} />}
-                    </Box>
-                ))}
+                                )}
+                            </CardContent>
+                        </Card>
+                    </Grid>
 
-                <Box sx={{ mt: 3, display: 'flex', justifyContent: 'space-between' }}>
-                    <Button
-                        startIcon={<AddIcon />}
-                        onClick={handleAddGuest}
-                        disabled={guestForms.length >= room.MaxOccupancy}
-                    >
-                        Add Guest
-                    </Button>
-                    <Box>
-                        <Button 
-                            variant="outlined" 
-                            onClick={() => navigate(-1)} 
-                            sx={{ mr: 2 }}
-                        >
-                            Cancel
-                        </Button>
-                        <Button 
-                            variant="contained"
-                            onClick={handleSubmit}
-                        >
-                            Save Booking
-                        </Button>
-                    </Box>
-                </Box>
-            </Paper>
-        </Container>
+                    {/* Booking Form */}
+                    <Grid item xs={12} md={8}>
+                        <Card>
+                            <CardContent>
+                                <form onSubmit={handleSubmit}>
+                                    <Typography variant="h6" gutterBottom>
+                                        Rental Details
+                                    </Typography>
+                                    
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={12} sm={6}>
+                                            <DatePicker
+                                                label="Start Date"
+                                                value={formData.startDate}
+                                                onChange={(date) => handleInputChange('startDate', date)}
+                                                renderInput={(params) => (
+                                                    <TextField 
+                                                        {...params} 
+                                                        fullWidth
+                                                        error={!!errors.startDate}
+                                                        helperText={errors.startDate}
+                                                    />
+                                                )}
+                                                minDate={new Date()}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <DatePicker
+                                                label="End Date"
+                                                value={formData.endDate}
+                                                onChange={(date) => handleInputChange('endDate', date)}
+                                                renderInput={(params) => (
+                                                    <TextField 
+                                                        {...params} 
+                                                        fullWidth
+                                                        error={!!errors.endDate}
+                                                        helperText={errors.endDate}
+                                                    />
+                                                )}
+                                                minDate={formData.startDate || new Date()}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <TextField
+                                                label="Quantity"
+                                                type="number"
+                                                value={formData.quantity}
+                                                onChange={(e) => handleInputChange('quantity', parseInt(e.target.value) || 1)}
+                                                fullWidth
+                                                inputProps={{ min: 1, max: 10 }}
+                                            />
+                                        </Grid>
+                                    </Grid>
+
+                                    <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>
+                                        Contact Information
+                                    </Typography>
+                                    
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={12} sm={6}>
+                                            <TextField
+                                                label="Full Name"
+                                                value={formData.customerName}
+                                                onChange={(e) => handleInputChange('customerName', e.target.value)}
+                                                fullWidth
+                                                required
+                                                error={!!errors.customerName}
+                                                helperText={errors.customerName}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <TextField
+                                                label="Email"
+                                                type="email"
+                                                value={formData.customerEmail}
+                                                onChange={(e) => handleInputChange('customerEmail', e.target.value)}
+                                                fullWidth
+                                                required
+                                                error={!!errors.customerEmail}
+                                                helperText={errors.customerEmail}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <TextField
+                                                label="Phone Number"
+                                                value={formData.customerPhone}
+                                                onChange={(e) => handleInputChange('customerPhone', e.target.value)}
+                                                fullWidth
+                                                required
+                                                error={!!errors.customerPhone}
+                                                helperText={errors.customerPhone}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <FormControl fullWidth>
+                                                <InputLabel>Delivery Option</InputLabel>
+                                                <Select
+                                                    value={formData.deliveryOption}
+                                                    onChange={(e) => handleInputChange('deliveryOption', e.target.value)}
+                                                    label="Delivery Option"
+                                                >
+                                                    <MenuItem value="pickup">Store Pickup (Free)</MenuItem>
+                                                    <MenuItem value="delivery">Delivery (+$25)</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </Grid>
+                                        {formData.deliveryOption === 'delivery' && (
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    label="Delivery Address"
+                                                    value={formData.deliveryAddress}
+                                                    onChange={(e) => handleInputChange('deliveryAddress', e.target.value)}
+                                                    fullWidth
+                                                    multiline
+                                                    rows={2}
+                                                    required
+                                                    error={!!errors.deliveryAddress}
+                                                    helperText={errors.deliveryAddress}
+                                                />
+                                            </Grid>
+                                        )}
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                label="Special Requests (Optional)"
+                                                value={formData.specialRequests}
+                                                onChange={(e) => handleInputChange('specialRequests', e.target.value)}
+                                                fullWidth
+                                                multiline
+                                                rows={3}
+                                            />
+                                        </Grid>
+                                    </Grid>
+
+                                    {errors.submit && (
+                                        <Alert severity="error" sx={{ mt: 3 }}>
+                                            {errors.submit}
+                                        </Alert>
+                                    )}
+
+                                    <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
+                                        <Button
+                                            variant="outlined"
+                                            onClick={() => navigate(-1)}
+                                            sx={{ flex: 1 }}
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            loading={loading}
+                                            startIcon={<PaymentIcon />}
+                                            sx={{ flex: 1 }}
+                                            disabled={loading}
+                                        >
+                                            Proceed to Payment
+                                        </Button>
+                                    </Stack>
+                                </form>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
+            </Container>
+        </LocalizationProvider>
     );
 };
 

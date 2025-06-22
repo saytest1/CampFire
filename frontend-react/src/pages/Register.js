@@ -42,13 +42,17 @@ function Register() {
           flexDirection: 'column',
           justifyContent: 'center',
           gap: 3,
-          py: 4
+          py: 4,
+          textAlign: 'center',
         }}
       >
-        <Typography variant="h4" component="h1" align="center" gutterBottom>
-          Register at The Conjuring
+        <Typography variant="h4" component="h1" color="primary" fontWeight="bold">
+          CampReady Rentals
         </Typography>
-        
+        <Typography variant="subtitle1" color="text.secondary">
+          Create your account to start renting camping gear!
+        </Typography>
+
         {error && <Alert severity="error">{error}</Alert>}
 
         <Box component="form" onSubmit={handleSubmit}>
@@ -111,7 +115,7 @@ function Register() {
             variant="text"
             onClick={() => navigate('/')}
           >
-            Back to Home
+            ⬅ Back to Home
           </Button>
         </Box>
       </Box>

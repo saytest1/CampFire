@@ -1,47 +1,39 @@
-import { Box, Button, Typography, Container } from '@mui/material';
+import React from 'react';
+import { Box, Button, Typography, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-function StartPage() {
+const StartPage = () => {
   const navigate = useNavigate();
 
   return (
-    <Container>
-      <Box
-        sx={{
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 4,
-          backgroundColor: 'background.default',
-        }}
-      >
-        <Typography variant="h1" component="h1" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-          The Conjuring
-        </Typography>
-        <Typography variant="h4" sx={{ mb: 4, color: 'text.secondary' }}>
-          Where Luxury Meets Mystery
-        </Typography>
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <Button 
-            variant="contained" 
-            size="large"
-            onClick={() => navigate('/login')}
-          >
-            Login
-          </Button>
-          <Button 
-            variant="outlined" 
-            size="large"
-            onClick={() => navigate('/register')}
-          >
-            Register
-          </Button>
-        </Box>
-      </Box>
-    </Container>
+    <Box
+      height="100vh"
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      sx={{
+        background: 'linear-gradient(to right, #a8edea, #fed6e3)',
+        textAlign: 'center',
+        px: 2,
+      }}
+    >
+      <Typography variant="h2" fontWeight="bold" color="primary">
+        CampShop Rentals
+      </Typography>
+      <Typography variant="h6" color="text.secondary" mt={2}>
+        All You Need for the Perfect Outdoor Adventure
+      </Typography>
+      <Stack direction="row" spacing={2} mt={4}>
+        <Button variant="contained" onClick={() => navigate('/login')}>
+          Login
+        </Button>
+        <Button variant="outlined" onClick={() => navigate('/register')}>
+          Register
+        </Button>
+      </Stack>
+    </Box>
   );
-}
+};
 
 export default StartPage;
