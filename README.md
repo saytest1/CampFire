@@ -16,7 +16,7 @@ Welcome to **CampFire** – Your Ultimate Outdoor Gear Destination!
 1. Open project.
 2. Open new Terminal
 3. cd api-server
-4. type: `npm run dev`
+4. type: `npm start`
 
 ## How to run front-end:
 1. Open project.
