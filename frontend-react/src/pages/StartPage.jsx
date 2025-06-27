@@ -19,7 +19,7 @@ const StartPage = () => {
       }}
     >
       <Typography variant="h2" fontWeight="bold" color="primary">
-        CampShop Rentals
+        CAMPFIRE SHOP
       </Typography>
       <Typography variant="h6" color="text.secondary" mt={2}>
         All You Need for the Perfect Outdoor Adventure

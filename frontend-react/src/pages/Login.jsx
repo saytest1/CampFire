@@ -21,9 +21,8 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/login', formData); // ⚠️ chỉnh URL nếu cần
+      const response = await axios.post('http://localhost:8080/login', formData);
 
-      // Nếu login thành công
       if (response.status === 200) {
         navigate('/dashboard');
       }
