@@ -22,4 +22,4 @@ Welcome to **CampFire** – Your Ultimate Outdoor Gear Destination!
 1. Open project.
 2. Open new Terminal
 3. cd frontend-react
-4. type: `npm start`
+4. type: `npm run dev`
