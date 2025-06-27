@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // index.js
+=======
+>>>>>>> f8de0e727ffab2d03ee8342f4b02adddde9e12f6
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -11,6 +14,7 @@ const PORT = process.env.PORT || 8080;
 // Database
 const db = require('./models');
 
+<<<<<<< HEAD
 // Middleware
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
@@ -60,6 +64,47 @@ app.use((req, res) => {
     success: false,
     message: 'Route not found'
   });
+=======
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
+
+const usersFilePath = path.join(__dirname, 'data', 'users.json');
+let users = [];
+
+try {
+  const rawData = fs.readFileSync(usersFilePath, 'utf-8');
+  users = JSON.parse(rawData);
+} catch (err) {
+  console.error('Failed to load users.json:', err.message);
+}
+
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
+
+  const user = users.find(u => u.email === email && u.password === password);
+
+  if (user) {
+    res.status(200).json({ message: 'Login successful' });
+  } else {
+    res.status(401).json({ message: 'Login failed' });
+  }
+});
+
+const root = require('./routes/root');
+const categories = require('./routes/categories');
+const products = require('./routes/products');
+
+app.use('/', root); 
+app.use('/categories', categories);
+app.use('/products', products);
+
+const PORT = 8080;
+app.listen(PORT, () => {
+  console.log(`Server is running at http://localhost:${PORT}`);
+>>>>>>> f8de0e727ffab2d03ee8342f4b02adddde9e12f6
 });
 
 // Sync database and start server
