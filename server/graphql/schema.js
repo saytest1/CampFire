@@ -2,6 +2,7 @@ import { createSchema } from "graphql-yoga";
 import _ from "lodash";
 
 import {typeDef as categories, resolvers as categoriesResolvers,} from "./categories.js";
+import {typeDef as products, resolvers as productsResolvers,} from "./products.js";
 
 const query = `
   type Query {
@@ -12,8 +13,8 @@ const query = `
     _empty: String
   }
 `;
-const typeDefs = [query, categories];
-const resolvers = _.merge(categoriesResolvers);
+const typeDefs = [query, categories, products];
+const resolvers = _.merge(categoriesResolvers, productsResolvers);
 
 export const schema = createSchema({
   typeDefs: typeDefs,

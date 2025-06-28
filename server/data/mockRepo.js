@@ -5,6 +5,12 @@ const mockData = {
       { id: 3, name: "Clothes" },
       { id: 4, name: "Pliers" },
     ],
+    products: [
+      { id: 1, name: "Tent", price: 100, categoryId: 1, manufacturer: "Tent Company" },
+      { id: 2, name: "Shoes", price: 50, categoryId: 2, manufacturer: "Shoes Company" },
+      { id: 3, name: "Clothes", price: 30, categoryId: 3, manufacturer: "Clothes Company" },
+      { id: 4, name: "Pliers", price: 20, categoryId: 4, manufacturer: "Pliers Company" },
+    ],
   };
 
   const db = {
@@ -31,6 +37,33 @@ const mockData = {
         const index = mockData.categories.findIndex((item) => item.id == id);
         if (index !== -1) {
           return mockData.categories.splice(index, 1);
+        }
+        return null;
+      },
+    },
+    products: {
+      getAll: () => mockData.products,
+      findById: (id) => mockData.products.find((item) => item.id == id),
+      create: (input) => {
+        const newProduct = { id: mockData.products.length + 1, ...input };
+        mockData.products.push(newProduct);
+        return newProduct;
+      },
+      update: (id, input) => {
+        const index = mockData.products.findIndex((item) => item.id == id);
+        if (index >= 0) {
+          Object.keys(input).map((key) => {
+            const value = input[key];
+            mockData.products[index][key] = value;
+          });
+          return mockData.products[index];
+        }
+        return null;
+      },
+      deleteById: (id) => {
+        const index = mockData.products.findIndex((item) => item.id == id);
+        if (index !== -1) {
+          return mockData.products.splice(index, 1);
         }
         return null;
       },
