@@ -16,8 +16,11 @@ const db = {
       const item = await Category.findById(id);
       return item;
     },
-    update: async (id, { name }) => {
+    updateById: async (id, { name }) => {
       const updated = await Category.findByIdAndUpdate(id, { name }, { new: true });
+      if (updated != null) {
+        return await Category.findById(id);
+      }
       return updated;
     },
     deleteById: async (id) => {
