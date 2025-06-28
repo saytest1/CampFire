@@ -4,14 +4,14 @@ export const typeDef = `
         name: String!
         price: Float!
         categoryId: Int!
-        manufacturer: String!
+        manufacturerId: Int!
     }
 
     input ProductInput {
         name: String!
         price: Float!
         categoryId: Int!
-        manufacturer: String!
+        manufacturerId: Int!
     }
 
     extend type Query {
