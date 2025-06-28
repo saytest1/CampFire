@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
+
 import { 
   Container, 
   Paper, 
@@ -10,6 +11,11 @@ import {
   Box,
   Alert 
 } from '@mui/material';
+<<<<<<< HEAD
+=======
+import { LOGIN } from '../graphql/authentication';
+import { jwtDecode } from 'jwt-decode';
+>>>>>>> origin/ha
 
 const Login = () => {
   const navigate = useNavigate();
