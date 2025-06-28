@@ -5,6 +5,9 @@ import { schema } from "./graphql/schema.js";
 // import { permissions } from "./permissions.js";
 import { db } from "./config.js";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 import { initDatabase } from "./data/init.js";
 await initDatabase();
 
