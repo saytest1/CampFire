@@ -3,7 +3,7 @@ version: '3.8'
 services:
   mongo:
     image: mongo:7
-    container_name: mongo_1
+    container_name: db
     ports:
       - "27017:27017"
     environment:
@@ -13,7 +13,7 @@ services:
     volumes:
       - ./data/mongo:/data/db
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh --quiet mongodb://localhost:27017/${MONGODB_DATABASE}
       interval: 5s
       timeout: 10s
       retries: 5
@@ -31,7 +31,8 @@ services:
     volumes:
       - ./api-server:/data/app
     environment:
-      MONGODB_URI: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@mongo:27017/${MONGODB_DATABASE}?authSource=admin
+      MONGODB_URI: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@db:27017/${MONGODB_DATABASE}?authSource=admin
+      #                     👆 dùng `db` vì container name là db
 
   frontend:
     build: ./frontend-react
