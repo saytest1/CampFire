@@ -2,15 +2,15 @@ export const typeDef = `
     type Detail {
         _id: ID!
         name: String!
-        orderId: Int!
-        productId: Int!
+        orderId: ID!
+        productId: ID!
         quantity: Int!
         price: Float!
     }
 
     input DetailInput {
-        orderId: Int!
-        productId: Int!
+        orderId: ID!
+        productId: ID!
         quantity: Int!
         price: Float!
     }

@@ -1,13 +1,13 @@
 export const typeDef = `
     type Order {
         _id: ID!
-        customerId: Int!
+        customerId: ID!
         orderDate: String!
         totalAmount: Float!
     }
 
     input OrderInput {
-        customerId: Int!
+        customerId: ID!
         orderDate: String!
         totalAmount: Float!
     }
