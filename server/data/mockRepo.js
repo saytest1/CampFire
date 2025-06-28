@@ -5,6 +5,7 @@ const mockData = {
       { id: 3, name: "Clothes" },
       { id: 4, name: "Pliers" },
     ],
+
     products: [
       { id: 1,  name: "Tent",   price: 100, manufacturer: "NatureHike" },
       { id: 2,  name: "Tent",   price: 100, manufacturer: "Coleman" },
@@ -18,6 +19,21 @@ const mockData = {
       { id: 10, name: "Pliers", price: 20,  manufacturer: "Stanley" },
       { id: 11, name: "Pliers", price: 20,  manufacturer: "Knipex" },
       { id: 12, name: "Pliers", price: 20,  manufacturer: "Channellock" },
+    ],
+
+    manufacturers: [
+      {id: 1, name: "NatureHike"},
+      {id: 2, name: "Coleman"},
+      {id: 3, name: "MSR"},
+      {id: 4, name: "Nike"},
+      {id: 5, name: "Adidas"},
+      {id: 6, name: "NewBalance"},
+      {id: 7, name: "The North Face"},
+      {id: 8, name: "Patagonia"},
+      {id: 9, name: "Columbia"},
+      {id: 10, name: "Stanley"},
+      {id: 11, name: "Knipex"},
+      {id: 12, name: "Channellock"},
     ],
  };
 
