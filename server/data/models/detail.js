@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 let Schema = mongoose.Schema;
 let String = Schema.Types.String;
 let Number = Schema.Types.Number;
-let Float = Schema.Types.Float;
 
 export const DetailSchema = new Schema(
   {
@@ -10,7 +9,7 @@ export const DetailSchema = new Schema(
     orderId: Number,
     productId: Number,
     quantity: Number,
-    price: Float,
+    price: Number,
   },
   {
     collection: "details",
