@@ -5,6 +5,7 @@ const mockData = {
       { id: 3, name: "Clothes" },
       { id: 4, name: "Pliers" },
     ],
+
     products: [
       { id: 1,  name: "Tent",   price: 100, manufacturer: "NatureHike" },
       { id: 2,  name: "Tent",   price: 100, manufacturer: "Coleman" },
@@ -18,6 +19,21 @@ const mockData = {
       { id: 10, name: "Pliers", price: 20,  manufacturer: "Stanley" },
       { id: 11, name: "Pliers", price: 20,  manufacturer: "Knipex" },
       { id: 12, name: "Pliers", price: 20,  manufacturer: "Channellock" },
+    ],
+
+    manufacturers: [
+      {id: 1, name: "NatureHike"},
+      {id: 2, name: "Coleman"},
+      {id: 3, name: "MSR"},
+      {id: 4, name: "Nike"},
+      {id: 5, name: "Adidas"},
+      {id: 6, name: "NewBalance"},
+      {id: 7, name: "The North Face"},
+      {id: 8, name: "Patagonia"},
+      {id: 9, name: "Columbia"},
+      {id: 10, name: "Stanley"},
+      {id: 11, name: "Knipex"},
+      {id: 12, name: "Channellock"},
     ],
  };
 
@@ -99,6 +115,60 @@ const mockData = {
         const index = mockData.manufacturers.findIndex((item) => item.id == id);
         if (index !== -1) {
           return mockData.manufacturers.splice(index, 1);
+        }
+        return null;
+      },
+    },
+    details: {
+      getAll: () => mockData.details,
+      findById: (id) => mockData.details.find((item) => item.id == id),
+      create: (input) => {
+        const newDetail = { id: mockData.details.length + 1, ...input };
+        mockData.details.push(newDetail);
+        return newDetail;
+      },
+      update: (id, input) => {
+        const index = mockData.details.findIndex((item) => item.id == id);
+        if (index >= 0) {
+          Object.keys(input).map((key) => {
+            const value = input[key];
+            mockData.details[index][key] = value;
+          });
+          return mockData.details[index];
+        }
+        return null;
+      },
+      deleteById: (id) => {
+        const index = mockData.details.findIndex((item) => item.id == id);
+        if (index !== -1) {
+          return mockData.details.splice(index, 1);
+        }
+        return null;
+      },
+    },
+    orders: {
+      getAll: () => mockData.orders,
+      findById: (id) => mockData.orders.find((item) => item.id == id),
+      create: (input) => {
+        const newOrder = { id: mockData.orders.length + 1, ...input };
+        mockData.orders.push(newOrder);
+        return newOrder;
+      },
+      update: (id, input) => {
+        const index = mockData.orders.findIndex((item) => item.id == id);
+        if (index >= 0) {
+          Object.keys(input).map((key) => {
+            const value = input[key];
+            mockData.orders[index][key] = value;
+          });
+          return mockData.orders[index];
+        }
+        return null;
+      },
+      deleteById: (id) => {
+        const index = mockData.orders.findIndex((item) => item.id == id);
+        if (index !== -1) {
+          return mockData.orders.splice(index, 1);
         }
         return null;
       },
