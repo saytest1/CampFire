@@ -146,6 +146,33 @@ const mockData = {
         return null;
       },
     },
+    orders: {
+      getAll: () => mockData.orders,
+      findById: (id) => mockData.orders.find((item) => item.id == id),
+      create: (input) => {
+        const newOrder = { id: mockData.orders.length + 1, ...input };
+        mockData.orders.push(newOrder);
+        return newOrder;
+      },
+      update: (id, input) => {
+        const index = mockData.orders.findIndex((item) => item.id == id);
+        if (index >= 0) {
+          Object.keys(input).map((key) => {
+            const value = input[key];
+            mockData.orders[index][key] = value;
+          });
+          return mockData.orders[index];
+        }
+        return null;
+      },
+      deleteById: (id) => {
+        const index = mockData.orders.findIndex((item) => item.id == id);
+        if (index !== -1) {
+          return mockData.orders.splice(index, 1);
+        }
+        return null;
+      },
+    },
   };
 
   export default db;
