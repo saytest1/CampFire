@@ -103,6 +103,33 @@ const mockData = {
         return null;
       },
     },
+    details: {
+      getAll: () => mockData.details,
+      findById: (id) => mockData.details.find((item) => item.id == id),
+      create: (input) => {
+        const newDetail = { id: mockData.details.length + 1, ...input };
+        mockData.details.push(newDetail);
+        return newDetail;
+      },
+      update: (id, input) => {
+        const index = mockData.details.findIndex((item) => item.id == id);
+        if (index >= 0) {
+          Object.keys(input).map((key) => {
+            const value = input[key];
+            mockData.details[index][key] = value;
+          });
+          return mockData.details[index];
+        }
+        return null;
+      },
+      deleteById: (id) => {
+        const index = mockData.details.findIndex((item) => item.id == id);
+        if (index !== -1) {
+          return mockData.details.splice(index, 1);
+        }
+        return null;
+      },
+    },
   };
 
   export default db;
