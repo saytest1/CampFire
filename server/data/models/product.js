@@ -6,7 +6,7 @@ let Number = Schema.Types.Number;
 export const ProductSchema = new Schema(
   {
     name: String,
-    price: Number,           // ✅ Sửa từ Float → Number
+    price: Number,
     categoryId: Number,
     manufacturerId: Number, 
   },
