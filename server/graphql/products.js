@@ -3,15 +3,17 @@ export const typeDef = `
         _id: ID!
         name: String!
         price: Float!
-        categoryId: Int!
-        manufacturerId: Int!
+        categoryId: ID!
+        manufacturerId: ID!
+        imageUrl: String
     }
 
     input ProductInput {
         name: String!
         price: Float!
-        categoryId: Int!
-        manufacturerId: Int!
+        categoryId: ID!
+        manufacturerId: ID!
+        imageUrl: String
     }
 
     extend type Query {
