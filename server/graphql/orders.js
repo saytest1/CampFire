@@ -1,6 +1,6 @@
 export const typeDef = `
     type Order {
-        id: ID!
+        _id: ID!
         customerId: Int!
         orderDate: String!
         totalAmount: Float!
@@ -14,13 +14,13 @@ export const typeDef = `
 
     extend type Query {
         orders: [Order]
-        order(id: ID!): Order
+        order(_id: ID!): Order
     }
 
     extend type Mutation {
         createOrder(input: OrderInput!): Order
-        updateOrder(id: ID!, input: OrderInput!): Order
-        deleteOrder(id: ID!): Int
+        updateOrder(_id: ID!, input: OrderInput!): Order
+        deleteOrder(_id: ID!): Int
     }
 `;
 
@@ -30,7 +30,7 @@ export const resolvers = {
             return context.db.orders.getAll();
         },
         order: (parent, args, context, info) => {
-            return context.db.orders.findById(args.id);
+            return context.db.orders.findById(args._id);
         },
     },
     Mutation: {
@@ -38,10 +38,10 @@ export const resolvers = {
             return context.db.orders.create(args.input);
         },
         updateOrder: (parent, args, context, info) => {
-            return context.db.orders.update(args.id, args.input);
+            return context.db.orders.updateById(args._id, args.input);
         },
         deleteOrder: (parent, args, context, info) => {
-            return context.db.orders.delete(args.id);
+            return context.db.orders.deleteById(args._id);
         },
     },
 };
