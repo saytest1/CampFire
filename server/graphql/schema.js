@@ -7,8 +7,12 @@ const query = `
   type Query {
     _empty: String
   }
+
+  type Mutation {
+    _empty: String
+  }
 `;
-const typeDefs = [categories];
+const typeDefs = [query, categories];
 const resolvers = _.merge(categoriesResolvers);
 
 export const schema = createSchema({
