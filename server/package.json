@@ -16,6 +16,7 @@
     "graphql-middleware": "^6.1.35",
     "graphql-yoga": "^5.13.5",
     "lodash": "^4.17.21",
-    "mongoose": "^8.16.1"
+    "mongoose": "^8.16.1",
+    "uuid": "^11.1.0"
   }
 }
