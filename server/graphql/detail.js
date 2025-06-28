@@ -1,6 +1,6 @@
 export const typeDef = `
     type Detail {
-        id: Int!
+        id: ID!
         name: String!
         orderId: Int!
         productId: Int!
@@ -17,13 +17,13 @@ export const typeDef = `
 
     extend type Query {
         details: [Detail]
-        detail(id: Int!): Detail
+        detail(id: ID!): Detail
     }
 
     extend type Mutation {
         createDetail(input: DetailInput!): Detail
-        updateDetail(id: Int!, input: DetailInput!): Detail
-        deleteDetail(id: Int!): Int
+        updateDetail(id: ID!, input: DetailInput!): Detail
+        deleteDetail(id: ID!): Int
     }
 `;
 

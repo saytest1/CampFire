@@ -1,6 +1,6 @@
 export const typeDef = `
     type Manufacturer {
-        id: Int!
+        id: ID!
         name: String!
     }
 
@@ -10,13 +10,13 @@ export const typeDef = `
 
     extend type Query {
         manufacturers: [Manufacturer]
-        manufacturer(id: Int!): Manufacturer
+        manufacturer(id: ID!): Manufacturer
     }
 
     extend type Mutation {
         createManufacturer(input: ManufacturerInput!): Manufacturer
-        updateManufacturer(id: Int!, input: ManufacturerInput!): Manufacturer
-        deleteManufacturer(id: Int!): Int
+        updateManufacturer(id: ID!, input: ManufacturerInput!): Manufacturer
+        deleteManufacturer(id: ID!): Int
     }
 `;
 
