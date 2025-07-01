@@ -1,6 +1,10 @@
 {
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
+    "dotenv": "^17.0.0",
+    "express": "^5.1.0",
+    "jest": "^30.0.3",
+    "mongodb-memory-server": "^10.1.4",
     "tailwindcss": "^4.1.11"
   }
 }

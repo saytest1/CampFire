@@ -1,28 +1,30 @@
 export const typeDef = `
     type Product {
-        id: ID!
+        _id: ID!
         name: String!
         price: Float!
-        categoryId: Int!
-        manufacturerId: Int!
+        categoryId: ID!
+        manufacturerId: ID!
+        imageUrl: String
     }
 
     input ProductInput {
         name: String!
         price: Float!
-        categoryId: Int!
-        manufacturerId: Int!
+        categoryId: ID!
+        manufacturerId: ID!
+        imageUrl: String
     }
 
     extend type Query {
         products: [Product]
-        product(id: ID!): Product
+        product(_id: ID!): Product
     }
 
     extend type Mutation {
         createProduct(input: ProductInput!): Product
-        updateProduct(id: ID!, input: ProductInput!): Product
-        deleteProduct(id: ID!): Int
+        updateProduct(_id: ID!, input: ProductInput!): Product
+        deleteProduct(_id: ID!): Int
     }
 `;
 
@@ -32,7 +34,7 @@ export const resolvers = {
             return context.db.products.getAll();
         },
         product: (parent, args, context, info) => {
-            return context.db.products.findById(args.id);
+            return context.db.products.findById(args._id);
         },
     },
     Mutation: {
@@ -40,10 +42,10 @@ export const resolvers = {
             return context.db.products.create(args.input);
         },
         updateProduct: (parent, args, context, info) => {
-            return context.db.products.update(args.id, args.input);
+            return context.db.products.updateById(args._id, args.input);
         },
         deleteProduct: (parent, args, context, info) => {
-            return context.db.products.deleteById(args.id);
+            return context.db.products.deleteById(args._id);
         },
     },
 };
