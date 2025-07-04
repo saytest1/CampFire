@@ -26,6 +26,22 @@ function buildOptions(choices, columns) {
   return options;
 }
 
+const values = {
+  ASC: 1,
+  DESC: -1,
+};
+
+function buildOptions(choices, columns) {
+  const options = {};
+  choices.forEach((option) => { // ID_ASC
+    const [left, right] = option.split('_');
+    const key = columns[left];
+    const value = values[right];
+    options[key] = value;
+  });
+  return options;
+}
+
 const db = {
   // categories
   categories: {
