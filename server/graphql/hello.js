@@ -1,11 +1,17 @@
 export const typeDef = `
-    type Query {
-        hello: String
-    }
+  extend type Query {
+    hello: String
+  }
 `;
 
 export const resolvers = {
-    Query: {
-        hello: () => "Hello World"
-    }
+  Query: {
+    hello: (parent, args, context, info) => {
+      if (!_.has(context, "secret")) {
+        return new GraphQLError("A secret is required.");
+      }
+
+      return `Hello World! ${context.secret}`;
+    },
+  },
 };
