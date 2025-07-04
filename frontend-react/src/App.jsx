@@ -16,9 +16,9 @@ import PaymentForm from './components/PaymentForm';
 import Cart from './components/Cart';
 import MyRentals from './components/MyRentals';
 import Products from './components/Products';
-import ProductDetail from './pages/ProductDetail';
+import ProductDetail from './components/ProductDetail';
 import ResetPassword from './components/ResetPassword';
-import OrderHistory from './pages/OrderHistory';
+import OrderHistory from './components/OrderHistory';
 import Checkout from './components/Checkout';
 
 // Create or import your theme
