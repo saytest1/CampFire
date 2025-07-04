@@ -18,8 +18,39 @@ export const typeDef = `
         imageUrl: String
     }
 
+
+    enum ProductsOrderBy {
+        ID_ASC
+        ID_DESC
+        NAME_ASC
+        NAME_DESC
+        PRICE_ASC
+        PRICE_DESC
+    }
+
+    type ProductConnection {
+        nodes: [Product]
+        totalCount: Int
+    }
+
+    input RangeConditionInput {
+        min: Float
+        max: Float
+    }
+
+    input ProductConnectionInput {
+        name: String
+        price: RangeConditionInput
+    }
+
+
     extend type Query {
-        products: [Product]
+        products(
+            first: Int
+            offset: Int
+            condition: ProductConnectionInput
+            orderBy: [ProductsOrderBy!] = ID_ASC
+        ): ProductConnection
         product(_id: ID!): Product
     }
 
@@ -32,8 +63,12 @@ export const typeDef = `
 
 export const resolvers = {
     Query: {
-        products: (parent, args, context, info) => {
-            return context.db.products.getAll();
+        products: async (parent, args, context, info) => {
+            const { items, totalCount } = await context.db.products.getAll(args);
+            return {
+                nodes: items,
+                totalCount: totalCount,
+            };
         },
         product: (parent, args, context, info) => {
             return context.db.products.findById(args._id);

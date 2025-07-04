@@ -9,7 +9,11 @@ export const typeDef = `
     }
 
     extend type Query {
-        categories: [Category]
+        categories(
+          first: Int
+          offset: Int
+          orderBy: [CategoriesOrderBy!] = ID_ASC
+        ): CategoryConnection
         category(_id: ID!): Category
     }
 
@@ -18,12 +22,29 @@ export const typeDef = `
         updateCategory(_id: ID!, input: CategoryInput!): Category
         deleteCategory(_id: ID!): Int
     }
+
+    enum CategoriesOrderBy {
+        ID_ASC
+        ID_DESC
+        NAME_ASC
+        NAME_DESC
+    }
+
+    type CategoryConnection {
+        nodes: [Category]
+        totalCount: Int
+    }
+
 `;
 
 export const resolvers = {
   Query: {
-    categories: (parent, args, context, info) => {
-      return context.db.categories.getAll();
+    categories: async (parent, args, context, info) => {
+      const { items, totalCount } = await context.db.categories.getAll(args);
+      return {
+        nodes: items,
+        totalCount: totalCount,
+      };
     },
     category: (parent, args, context, info) => {
       return context.db.categories.findById(args._id);
