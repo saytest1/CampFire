@@ -13,10 +13,11 @@
   "dependencies": {
     "@envelop/graphql-middleware": "^8.0.0",
     "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^17.0.1",
     "graphql": "^16.11.0",
     "graphql-middleware": "^6.1.35",
-    "graphql-yoga": "^5.13.5",
+    "graphql-yoga": "^5.14.0",
     "lodash": "^4.17.21",
     "mongoose": "^8.16.1",
     "uuid": "^11.1.0"
