@@ -1,8 +1,8 @@
 import { createServer } from "node:http";
 import { createYoga } from "graphql-yoga";
 import { schema } from "./graphql/schema.js";
-// import { useGraphQLMiddleware } from "@envelop/graphql-middleware";
-// import { permissions } from "./permissions.js";
+import { useGraphQLMiddleware } from "@envelop/graphql-middleware";
+import { permissions } from "./permissions.js";
 import { db } from "./config.js";
 
 import express from "express";
@@ -29,37 +29,46 @@ app.use('/img', express.static(path.join(__dirname, 'img')));
 const yoga = createYoga({ 
     schema,
     graphqlEndpoint: "/",
-    // plugins: [useGraphQLMiddleware([permissions])],
+    plugins: [useGraphQLMiddleware([permissions])],
+
+    // context: async ({ request }) => {
+    //     return {
+    //       db: db,
+    //       secret: request.headers.get("secret") ?? "",
+    //     };
+    //   },
 
     context: async ({ request }) => {
-        return {
-          db: db,
-          secret: request.headers.get("secret") ?? "",
-        };
-      },
+      const authorization = request.headers.get("authorization") ?? "";
+      let user = null;
+      if (authorization.startsWith("Bearer")) {
+        const token = authorization.substring(7);
+        try {
+          user = jwt.verify(token, signingKey);
+        } catch (e) {
+          user = null;
+        }
+      }
+      const headers = {};
+      for (const [key, value] of request.headers.entries()) {
+        headers[key] = value;
+      }
+      return {
+        db: db,
+        user: user,
+        headers,
+      };
+    },
 
-  //   // context: async ({ request }) => {
-  //   //   const authorization = request.headers.get("authorization") ?? "";
+    cors: {
+      origin: "*",
+      credentials: true,
+      allowedHeaders: ["X-Custom-Header", "content-type", "authorization"],
+      methods: ["POST"],
+    },
+  }
+);
 
-  //   // if (authorization.startsWith("Bearer")) {
-  //   //   const token = authorization.substring(7, authorization.length);
-  //   //   jwt.verify(token, signingKey, function (error, decoded) {
-  //   //     let user = null;
-  //   //     if (!error) {
-  //   //       user = decoded;
-  //   //     }
-
-  //   //     return {
-  //   //       db: db,
-  //   //       user: user,
-  //   //     };
-  //   //   });
-  //   // }
-  //   // return {
-  //   //   db: db,
-  //   // };
-  // },
-});
 const server = createServer(yoga);
 
 app.get("/img/:filename", (req, res) => {
