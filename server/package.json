@@ -12,6 +12,8 @@
   "description": "",
   "dependencies": {
     "@envelop/graphql-middleware": "^8.0.0",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.0.1",
     "graphql": "^16.11.0",
     "graphql-middleware": "^6.1.35",
     "graphql-yoga": "^5.13.5",

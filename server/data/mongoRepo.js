@@ -3,6 +3,7 @@ import { Product } from "./models/index.js";
 import { Manufacturer } from "./models/index.js";
 import { Detail } from "./models/index.js";
 import { Order } from "./models/index.js";
+import { User } from "./models/index.js";
 
 const db = {
   categories: {
@@ -147,6 +148,11 @@ const db = {
     deleteById: async (id) => {
       const deleted = await Order.findByIdAndDelete(id);
       return deleted;
+    },
+  },
+  users: {
+    findOne: async (username) => {
+      return await User.findOne({ username }).lean();
     },
   },
 };

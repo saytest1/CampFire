@@ -19,6 +19,9 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 import { initDatabase } from "./data/init.js";
 await initDatabase();
 
+const signingKey = process.env.JWT_SECRET;
+import jwt from "jsonwebtoken";
+
 const app = express();
 
 app.use('/img', express.static(path.join(__dirname, 'img')));
@@ -27,12 +30,35 @@ const yoga = createYoga({
     schema,
     graphqlEndpoint: "/",
     // plugins: [useGraphQLMiddleware([permissions])],
+
     context: async ({ request }) => {
         return {
           db: db,
           secret: request.headers.get("secret") ?? "",
         };
       },
+
+  //   // context: async ({ request }) => {
+  //   //   const authorization = request.headers.get("authorization") ?? "";
+
+  //   // if (authorization.startsWith("Bearer")) {
+  //   //   const token = authorization.substring(7, authorization.length);
+  //   //   jwt.verify(token, signingKey, function (error, decoded) {
+  //   //     let user = null;
+  //   //     if (!error) {
+  //   //       user = decoded;
+  //   //     }
+
+  //   //     return {
+  //   //       db: db,
+  //   //       user: user,
+  //   //     };
+  //   //   });
+  //   // }
+  //   // return {
+  //   //   db: db,
+  //   // };
+  // },
 });
 const server = createServer(yoga);
 
