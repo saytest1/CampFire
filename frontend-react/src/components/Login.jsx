@@ -8,8 +8,7 @@ import {
   TextField, 
   Button, 
   Typography, 
-  Box,
-  Alert 
+  Box 
 } from '@mui/material';
 <<<<<<< HEAD
 =======
@@ -20,21 +19,18 @@ import { jwtDecode } from 'jwt-decode';
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
-  const [error, setError] = useState(null);
-  const [loginMutation, { loading }] = useMutation(LOGIN);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
-    setError(null);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // Xử lý đăng nhập ở đây
     console.log('Đăng nhập với:', formData);
@@ -49,24 +45,18 @@ const Login = () => {
           <Typography component="h1" variant="h5" align="center">
             Đăng nhập
           </Typography>
-          {error && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {error}
-            </Alert>
-          )}
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="username"
-              label="Tên người dùng"
-              name="username"
-              autoComplete="username"
+              id="email"
+              label="Email"
+              name="email"
+              autoComplete="email"
               autoFocus
-              value={formData.username}
+              value={formData.email}
               onChange={handleChange}
-              disabled={loading}
             />
             <TextField
               margin="normal"
@@ -79,16 +69,14 @@ const Login = () => {
               autoComplete="current-password"
               value={formData.password}
               onChange={handleChange}
-              disabled={loading}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              disabled={loading}
             >
-              {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+              Đăng nhập
             </Button>
             <Box textAlign="center">
               <Link to="/reset-password" style={{ textDecoration: 'none' }}>
