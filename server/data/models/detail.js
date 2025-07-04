@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 let Schema = mongoose.Schema;
 let String = Schema.Types.String;
 let Number = Schema.Types.Number;
+let ObjectId = Schema.Types.ObjectId;
 
 export const DetailSchema = new Schema(
   {
-    name: String,
-    orderId: Number,
-    productId: Number,
+    orderId: { type: ObjectId, ref: 'order' },
+    productId: { type: ObjectId, ref: 'product' },
     quantity: Number,
     price: Number,
   },

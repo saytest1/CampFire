@@ -4,7 +4,9 @@ export const typeDef = `
         name: String!
         price: Float!
         categoryId: ID!
+        categoryName: String!
         manufacturerId: ID!
+        manufacturerName: String!
         imageUrl: String
     }
 
@@ -36,6 +38,16 @@ export const resolvers = {
         product: (parent, args, context, info) => {
             return context.db.products.findById(args._id);
         },
+    },
+    Product: {
+        categoryName: async (parent, args, context) => {
+            const category = await context.db.categories.findById(parent.categoryId);
+            return category ? category.name : null;
+        },
+        manufacturerName: async (parent, args, context) => {
+            const manufacturer = await context.db.manufacturers.findById(parent.manufacturerId);
+            return manufacturer ? manufacturer.name : null;
+        }
     },
     Mutation: {
         createProduct: (parent, args, context, info) => {
