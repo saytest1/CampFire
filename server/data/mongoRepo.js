@@ -6,6 +6,7 @@ import { Order } from "./models/index.js";
 import { User } from "./models/index.js";
 
 const db = {
+  // categories
   categories: {
     getAll: async () => {
       const items = await Category.find();
@@ -33,6 +34,8 @@ const db = {
       return deleted;
     },
   },
+
+  // products
   products: {
     getAll: async () => {
       const items = await Product.find();
@@ -63,6 +66,8 @@ const db = {
       return deleted;
     },
   },
+
+  // manufacturers
   manufacturers: {
     getAll: async () => {
       const items = await Manufacturer.find();
@@ -90,6 +95,8 @@ const db = {
       return deleted;
     },
   },
+
+  // details
   details: {
     getAll: async () => {
       const items = await Detail.find();
@@ -121,6 +128,8 @@ const db = {
       return deleted;
     },
   },
+
+  // orders
   orders: {
     getAll: async () => {
       const items = await Order.find();
@@ -150,6 +159,8 @@ const db = {
       return deleted;
     },
   },
+
+  // users
   users: {
     findOne: async (username) => {
       return await User.findOne({ username }).lean();
