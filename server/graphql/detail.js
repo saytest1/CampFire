@@ -1,7 +1,6 @@
 export const typeDef = `
     type Detail {
         _id: ID!
-        name: String!
         orderId: ID!
         productId: ID!
         quantity: Int!
