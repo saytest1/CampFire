@@ -10,6 +10,9 @@ export default {
       { name: "The North Face" },
       { name: "Patagonia" },
       { name: "Columbia" },
+      { name: "Stanley" },
+      { name: "Knipex" },
+      { name: "Channellock" },
     ]);
   },
 };
