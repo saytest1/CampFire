@@ -5,9 +5,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// Create Apollo Client
 const httpLink = createHttpLink({
-  uri: 'https://ubiquitous-space-couscous-rv9wpv9w6p9fpj77-4000.app.github.dev/', // Adjust this URL to match your GraphQL server
+  uri: 'https://fictional-giggle-v6vx7qvq9gwg369-4000.app.github.dev/',
 });
 
 const client = new ApolloClient({
@@ -24,7 +23,4 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
