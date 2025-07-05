@@ -5,6 +5,9 @@ export const LOGIN = gql`
     login(input: $input) {
       success
       message
+      data {
+        jwt
+      }
     }
   }
 `;
