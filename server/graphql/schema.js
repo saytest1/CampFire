@@ -9,6 +9,7 @@ import { typeDef as categories, resolvers as categoriesResolvers } from "./categ
 import { typeDef as products, resolvers as productsResolvers } from "./products.js";
 import { typeDef as manufacturers, resolvers as manufacturersResolvers } from "./manufacturer.js";
 import { typeDef as details, resolvers as detailsResolvers } from "./detail.js";
+import { typeDef as reviews, resolvers as reviewsResolvers } from "./review.js";
 
 // orders (Admin)
 import { typeDef as orders, resolvers as ordersResolvers } from "./orders.js";
@@ -89,6 +90,7 @@ const typeDefs = [
   products,
   manufacturers,
   details,
+  reviews,
   orders,          
   upload,
   authentication
@@ -100,6 +102,7 @@ const resolvers = _.merge(
   productsResolvers,
   manufacturersResolvers,
   detailsResolvers,
+  reviewsResolvers,
   ordersResolvers, 
   uploadResolvers,
   authenticationResolvers
