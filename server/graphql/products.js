@@ -52,6 +52,7 @@ export const typeDef = `
             orderBy: [ProductsOrderBy!] = ID_ASC
         ): ProductConnection
         product(_id: ID!): Product
+        productsByCategory(categoryId: ID!, first: Int, offset: Int): ProductConnection
     }
 
     extend type Mutation {
@@ -72,6 +73,13 @@ export const resolvers = {
         },
         product: (parent, args, context, info) => {
             return context.db.products.findById(args._id);
+        },
+        productsByCategory: async (parent, args, context, info) => {
+            const { items, totalCount } = await context.db.products.getAllByCategory(args);
+            return {
+                nodes: items,
+                totalCount: totalCount,
+            };
         },
     },
     Product: {

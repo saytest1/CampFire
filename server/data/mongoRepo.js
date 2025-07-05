@@ -5,6 +5,7 @@ import { Detail } from "./models/index.js";
 import { Order } from "./models/index.js";
 import { User } from "./models/index.js";
 import { Review } from "./models/index.js";
+import mongoose from "mongoose";
 
 const values = {
   ASC: 1,
@@ -73,6 +74,39 @@ const db = {
   products: {
     getAll: async ({ first, offset, orderBy, condition }) => {
       const query = {};
+
+      if (condition) {
+        if (condition.name) {
+          query.name = { $regex: condition.name, $options: "i" };
+        }
+
+        if (condition.price) {
+          query.price = { $gte: condition.price.min, $lte: condition.price.max };
+        }
+      }
+
+      const columns = {
+        ID: "_id",
+        NAME: "name",
+        PRICE: "price",
+      };
+
+      const options = buildOptions(orderBy, columns);
+
+      const totalCount = await Product.find(query).sort(options).countDocuments();
+      if (offset >= totalCount) {
+        offset = 0;
+      }
+
+      const items = await Product.find(query).sort(options).skip(offset).limit(first);
+
+      return {
+        items: items,
+        totalCount: totalCount,
+      };
+    },
+    getAllByCategory: async ({ categoryId, first, offset, orderBy, condition }) => {
+      const query = {}
 
       if (condition) {
         if (condition.name) {
