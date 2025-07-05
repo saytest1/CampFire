@@ -5,12 +5,15 @@ import {
   Grid, 
   Card, 
   CardContent, 
-  CardMedia,
   CardActionArea,
   Box,
-  Chip
+  Chip,
+  CircularProgress,
+  Alert
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
+import { GET_ALL_CATEGORIES } from '../graphql/categories';
 import TentIcon from '@mui/icons-material/Cabin';
 import BackpackIcon from '@mui/icons-material/Backpack';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
@@ -21,60 +24,65 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 const Categories = () => {
   const navigate = useNavigate();
   
-  const categories = [
-    { 
-      id: 1, 
-      name: 'Lều cắm trại', 
-      icon: TentIcon,
-      count: 15,
-      color: '#4CAF50',
-      description: 'Các loại lều cho mọi địa hình'
-    },
-    { 
-      id: 2, 
-      name: 'Túi ngủ', 
-      icon: BackpackIcon,
-      count: 20,
-      color: '#2196F3',
-      description: 'Túi ngủ ấm áp, nhẹ nhàng'
-    },
-    { 
-      id: 3, 
-      name: 'Bếp dã ngoại', 
-      icon: LocalFireDepartmentIcon,
-      count: 10,
-      color: '#FF5722',
-      description: 'Bếp gas, bếp cồn tiện lợi'
-    },
-    { 
-      id: 4, 
-      name: 'Đèn pin & Chiếu sáng', 
-      icon: FlashlightOnIcon,
-      count: 25,
-      color: '#FFC107',
-      description: 'Đèn pin, đèn camping'
-    },
-    { 
-      id: 5, 
-      name: 'Dụng cụ nấu ăn', 
-      icon: KitchenIcon,
-      count: 18,
-      color: '#9C27B0',
-      description: 'Nồi, chảo, dao kéo dã ngoại'
-    },
-    { 
-      id: 6, 
-      name: 'Phụ kiện khác', 
-      icon: MoreHorizIcon,
-      count: 30,
-      color: '#607D8B',
-      description: 'Bàn ghế, hammock, v.v...'
-    }
-  ];
+  // Fetch categories from GraphQL API
+  const { loading, error, data } = useQuery(GET_ALL_CATEGORIES);
+
+  // Icon mapping for categories
+  const iconMap = {
+    'Lều cắm trại': TentIcon,
+    'Túi ngủ': BackpackIcon,
+    'Bếp dã ngoại': LocalFireDepartmentIcon,
+    'Đèn pin & Chiếu sáng': FlashlightOnIcon,
+    'Dụng cụ nấu ăn': KitchenIcon,
+    'Phụ kiện khác': MoreHorizIcon,
+  };
+
+  // Color mapping for categories
+  const colorMap = {
+    'Lều cắm trại': '#4CAF50',
+    'Túi ngủ': '#2196F3',
+    'Bếp dã ngoại': '#FF5722',
+    'Đèn pin & Chiếu sáng': '#FFC107',
+    'Dụng cụ nấu ăn': '#9C27B0',
+    'Phụ kiện khác': '#607D8B',
+  };
+
+  // Description mapping for categories
+  const descriptionMap = {
+    'Lều cắm trại': 'Các loại lều cho mọi địa hình',
+    'Túi ngủ': 'Túi ngủ ấm áp, nhẹ nhàng',
+    'Bếp dã ngoại': 'Bếp gas, bếp cồn tiện lợi',
+    'Đèn pin & Chiếu sáng': 'Đèn pin, đèn camping',
+    'Dụng cụ nấu ăn': 'Nồi, chảo, dao kéo dã ngoại',
+    'Phụ kiện khác': 'Bàn ghế, hammock, v.v...',
+  };
 
   const handleCategoryClick = (categoryId) => {
     navigate(`/products?category=${categoryId}`);
   };
+
+  if (loading) {
+    return (
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4, textAlign: 'center' }}>
+        <CircularProgress />
+        <Typography variant="h6" sx={{ mt: 2 }}>
+          Đang tải danh mục...
+        </Typography>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Alert severity="error">
+          Lỗi khi tải danh mục: {error.message}
+        </Alert>
+      </Container>
+    );
+  }
+
+  const categories = data?.categories?.nodes || [];
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -100,9 +108,12 @@ const Categories = () => {
       
       <Grid container spacing={3}>
         {categories.map((category) => {
-          const IconComponent = category.icon;
+          const IconComponent = iconMap[category.name] || MoreHorizIcon;
+          const color = colorMap[category.name] || '#607D8B';
+          const description = descriptionMap[category.name] || 'Sản phẩm chất lượng cao';
+          
           return (
-            <Grid item xs={12} sm={6} md={4} key={category.id}>
+            <Grid item xs={12} sm={6} md={4} key={category._id}>
               <Card 
                 sx={{ 
                   height: '100%',
@@ -114,7 +125,7 @@ const Categories = () => {
                 }}
               >
                 <CardActionArea 
-                  onClick={() => handleCategoryClick(category.id)}
+                  onClick={() => handleCategoryClick(category._id)}
                   sx={{ height: '100%' }}
                 >
                   <CardContent>
@@ -127,7 +138,7 @@ const Categories = () => {
                     >
                       <Box
                         sx={{
-                          backgroundColor: category.color,
+                          backgroundColor: color,
                           borderRadius: 2,
                           p: 1.5,
                           display: 'flex',
@@ -152,7 +163,7 @@ const Categories = () => {
                           {category.name}
                         </Typography>
                         <Chip 
-                          label={`${category.count} sản phẩm`}
+                          label="Xem sản phẩm"
                           size="small"
                           sx={{ mt: 0.5 }}
                         />
@@ -162,7 +173,7 @@ const Categories = () => {
                       variant="body2" 
                       color="text.secondary"
                     >
-                      {category.description}
+                      {description}
                     </Typography>
                   </CardContent>
                 </CardActionArea>
