@@ -8,6 +8,7 @@ export const typeDef = `
         comment: String!
         createdAt: String!
         updatedAt: String!
+        imageFile: String
     }
 
     input CreateReviewInput {
@@ -15,12 +16,14 @@ export const typeDef = `
         productId: ID!
         rating: Int!
         comment: String!
+        imageFile: String
     }
 
     input UpdateReviewInput {
         _id: ID!
         rating: Int
         comment: String
+        imageFile: String
     }
 
 

@@ -31,6 +31,28 @@ export const CREATE_CATEGORY = gql`
   }
 `;
 
+export const GET_PRODUCTS_BY_CATEGORY = gql`
+  query GetProductsByCategory($categoryId: ID!, $first: Int, $offset: Int) {
+    products(
+      first: $first
+      offset: $offset
+      condition: { categoryId: $categoryId }
+    ) {
+      nodes {
+        _id
+        name
+        price
+        categoryId
+        categoryName
+        manufacturerId
+        manufacturerName
+        imageUrl
+      }
+      totalCount
+    }
+  }
+`;
+
 export const UPDATE_CATEGORY = gql`
   mutation UpdateCategory($input: UpdateCategoryInput!) {
     updateCategory(input: $input) {
