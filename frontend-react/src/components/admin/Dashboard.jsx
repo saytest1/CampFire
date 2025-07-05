@@ -12,7 +12,3 @@ export default function Dashboard() {
     </div>
   );
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> rolando

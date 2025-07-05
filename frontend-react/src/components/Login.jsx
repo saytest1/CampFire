@@ -11,7 +11,7 @@ import {
   Alert 
 } from '@mui/material';
 import { LOGIN } from '../graphql/authentication';
-import jwtDecode from 'jwt-decode'; // Thêm thư viện để giải mã JWT
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -68,13 +68,10 @@ const Login = () => {
                 localStorage.setItem('userRole', role);
                 switch (role) {
                   case 'admin':
-                    navigate('/admin/dashboard');
-                    break;
-                  case 'manager':
-                    navigate('/manager/dashboard');
+                    navigate('/components/admin/Dashboard.jsx');
                     break;
                   case 'customer':
-                    navigate('/home');
+                    navigate('/components/Dashboard.jsx');
                     break;
                   default:
                     setError('Vai trò không hợp lệ');
