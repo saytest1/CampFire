@@ -12,6 +12,7 @@ export const ProductSchema = new Schema(
     categoryName: { type: String, ref: 'category' },
     manufacturerId: { type: ObjectId, ref: 'manufacturer' }, 
     manufacturerName: { type: String, ref: 'manufacturer' },
+    imageUrl: String,
   },
   {
     collection: "products",
