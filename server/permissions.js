@@ -76,5 +76,9 @@ export const permissions = {
 
         // upload
         upload: isAdminOrManager,
+
+        // reviews
+        updateReview: isAdminOrManager,
+        deleteReview: isAdminOrManager,
     },
 };
