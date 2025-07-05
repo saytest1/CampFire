@@ -7,6 +7,7 @@ export const LOGIN = gql`
       message
       data {
         jwt
+        role
       }
     }
   }
