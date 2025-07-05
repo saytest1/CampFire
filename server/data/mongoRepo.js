@@ -5,7 +5,26 @@ import { Detail } from "./models/index.js";
 import { Order } from "./models/index.js";
 import { User } from "./models/index.js";
 import { Review } from "./models/index.js";
+<<<<<<< HEAD
 import mongoose from "mongoose";
+=======
+>>>>>>> rolando
+
+const values = {
+  ASC: 1,
+  DESC: -1,
+};
+
+function buildOptions(choices, columns) {
+  const options = {};
+  choices.forEach((option) => { // ID_ASC
+    const [left, right] = option.split('_');
+    const key = columns[left];
+    const value = values[right];
+    options[key] = value;
+  });
+  return options;
+}
 
 const values = {
   ASC: 1,
@@ -109,7 +128,42 @@ const db = {
       const query = { categoryId: new mongoose.Types.ObjectId(categoryId) };
       const items = await Product.find(query);
       return items;
+<<<<<<< HEAD
+    getAllByCategory: async ({ categoryId, first, offset, orderBy, condition }) => {
+      const query = {}
+
+      if (condition) {
+        if (condition.name) {
+          query.name = { $regex: condition.name, $options: "i" };
+        }
+
+        if (condition.price) {
+          query.price = { $gte: condition.price.min, $lte: condition.price.max };
+        }
+      }
+
+      const columns = {
+        ID: "_id",
+        NAME: "name",
+        PRICE: "price",
+      };
+
+      const options = buildOptions(orderBy, columns);
+
+      const totalCount = await Product.find(query).sort(options).countDocuments();
+      if (offset >= totalCount) {
+        offset = 0;
+      }
+
+      const items = await Product.find(query).sort(options).skip(offset).limit(first);
+
+      return {
+        items: items,
+        totalCount: totalCount,
+      };
     },
+=======
+>>>>>>> rolando
     create: async ({ name, price, categoryId, manufacturerId }) => {
       const created = await Product.create({
         name: name,
