@@ -10,8 +10,6 @@ import {
   Box,
   Alert 
 } from '@mui/material';
-import { LOGIN } from '../graphql/authentication';
-import jwtDecode from 'jwt-decode'; // Thêm thư viện để giải mã JWT
 
 const Login = () => {
   const navigate = useNavigate();
@@ -32,76 +30,10 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await loginMutation({
-        variables: {
-          input: {
-            username: formData.username,
-            password: formData.password
-          }
-        }
-      });
-      const { data, errors } = response;
-
-      console.log('Full response from server:', JSON.stringify(response, null, 2));
-
-      if (errors) {
-        console.error('GraphQL Errors:', errors);
-        setError(errors[0]?.message || 'Lỗi không xác định từ server');
-        return;
-      }
-
-      if (data && data.login) {
-        if (data.login.success) {
-          const { jwt } = data.login.data || {};
-          console.log('Extracted JWT:', jwt);
-
-          if (jwt) {
-            localStorage.setItem('jwt', jwt);
-            // Giải mã JWT để lấy role
-            try {
-              const decodedToken = jwtDecode(jwt);
-              const role = decodedToken.role;
-              console.log('Decoded role from JWT:', role);
-
-              if (role) {
-                localStorage.setItem('userRole', role);
-                switch (role) {
-                  case 'admin':
-                    navigate('/admin/dashboard');
-                    break;
-                  case 'manager':
-                    navigate('/manager/dashboard');
-                    break;
-                  case 'customer':
-                    navigate('/home');
-                    break;
-                  default:
-                    setError('Vai trò không hợp lệ');
-                }
-              } else {
-                console.error('Role not found in JWT payload');
-                setError('Vai trò không được tìm thấy trong token');
-              }
-            } catch (decodeError) {
-              console.error('Error decoding JWT:', decodeError);
-              setError('Không thể giải mã token xác thực');
-            }
-          } else {
-            console.error('JWT not found in response');
-            setError('Không nhận được token xác thực');
-          }
-        } else {
-          setError(data.login.message || 'Tên người dùng hoặc mật khẩu không đúng');
-        }
-      } else {
-        console.error('Invalid response structure:', data);
-        setError('Phản hồi từ server không hợp lệ');
-      }
-    } catch (err) {
-      console.error('Apollo Error:', err);
-      setError(err.message || 'Đã có lỗi xảy ra. Vui lòng thử lại.');
-    }
+    // Xử lý đăng nhập ở đây
+    console.log('Đăng nhập với:', formData);
+    // Sau khi đăng nhập thành công, chuyển đến home
+    navigate('/home');
   };
 
   return (

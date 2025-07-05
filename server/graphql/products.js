@@ -52,7 +52,10 @@ export const typeDef = `
             orderBy: [ProductsOrderBy!] = ID_ASC
         ): ProductConnection
         product(_id: ID!): Product
+<<<<<<< HEAD
         productsByCategory(categoryId: ID!, first: Int, offset: Int): ProductConnection
+=======
+>>>>>>> rolando
     }
 
     extend type Mutation {
@@ -81,6 +84,16 @@ export const resolvers = {
                 totalCount: totalCount,
             };
         },
+    },
+    Product: {
+        categoryName: async (parent, args, context) => {
+            const category = await context.db.categories.findById(parent.categoryId);
+            return category ? category.name : null;
+        },
+        manufacturerName: async (parent, args, context) => {
+            const manufacturer = await context.db.manufacturers.findById(parent.manufacturerId);
+            return manufacturer ? manufacturer.name : null;
+        }
     },
     Product: {
         categoryName: async (parent, args, context) => {

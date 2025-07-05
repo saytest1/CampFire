@@ -5,7 +5,10 @@ import { Detail } from "./models/index.js";
 import { Order } from "./models/index.js";
 import { User } from "./models/index.js";
 import { Review } from "./models/index.js";
+<<<<<<< HEAD
 import mongoose from "mongoose";
+=======
+>>>>>>> rolando
 
 const values = {
   ASC: 1,
@@ -105,6 +108,7 @@ const db = {
         totalCount: totalCount,
       };
     },
+<<<<<<< HEAD
     getAllByCategory: async ({ categoryId, first, offset, orderBy, condition }) => {
       const query = {}
 
@@ -138,6 +142,8 @@ const db = {
         totalCount: totalCount,
       };
     },
+=======
+>>>>>>> rolando
     create: async ({ name, price, categoryId, manufacturerId }) => {
       const created = await Product.create({
         name: name,
