@@ -93,13 +93,14 @@ function App() {
       <Router>
         <Routes>
           {/* Routes không cần layout */}
-          <Route path="/" element={<StartPage />} />
-          <Route path="/login" element={<Login />} />
+          {/* <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} /> */}
           
           {/* Routes với layout */}
           <Route element={<DashboardLayout />}>
+            {/* Route trực tiếp đến Categories để test */}
+            <Route path="/" element={<Categories />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/categories" element={<Categories />} />
