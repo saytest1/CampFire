@@ -1,51 +1,84 @@
 import { gql } from "@apollo/client";
 
 export const GET_ALL_PRODUCTS = gql`
-  query GetAllProducts {
-    products(first: 22, offset: 0) {
+  query GetAllProducts($first: Int, $offset: Int, $condition: ProductConnectionInput, $orderBy: [ProductsOrderBy!]) {
+    products(first: $first, offset: $offset, condition: $condition, orderBy: $orderBy) {
       nodes {
         _id
         name
+        price
+        categoryId
+        categoryName
+        manufacturerId
+        manufacturerName
+        imageUrl
       }
+      totalCount
+    }
+  }
+`;
+
+export const GET_PRODUCTS_BY_CATEGORY = gql`
+  query GetProductsByCategory($categoryId: ID!, $first: Int, $offset: Int) {
+    products(first: $first, offset: $offset, condition: { categoryId: $categoryId }) {
+      nodes {
+        _id
+        name
+        price
+        categoryId
+        categoryName
+        manufacturerId
+        manufacturerName
+        imageUrl
+      }
+      totalCount
     }
   }
 `;
 
 export const GET_PRODUCT_BY_ID = gql`
   query GetProductById($id: ID!) {
-    product(id: $id) {
+    product(_id: $id) {
       _id
       name
+      price
+      categoryId
+      categoryName
+      manufacturerId
+      manufacturerName
+      imageUrl
     }
   }
 `;
 
 export const CREATE_PRODUCT = gql`
-  mutation CreateProduct($input: CreateProductInput!) {
+  mutation CreateProduct($input: ProductInput!) {
     createProduct(input: $input) {
-      product {
-        _id
-        name
-      }
+      _id
+      name
+      price
+      categoryId
+      manufacturerId
+      imageUrl
     }
   }
 `;
 
 export const UPDATE_PRODUCT = gql`
-  mutation UpdateProduct($input: UpdateProductInput!) {
-    updateProduct(input: $input) {
-      product {
-        _id
-        name
-      }
+  mutation UpdateProduct($_id: ID!, $input: ProductInput!) {
+    updateProduct(_id: $_id, input: $input) {
+      _id
+      name
+      price
+      categoryId
+      manufacturerId
+      imageUrl
     }
   }
 `;
 
 export const DELETE_PRODUCT = gql`
-  mutation DeleteProduct($input: DeleteProductInput!) {
-    deleteProduct(input: $input) {
-      success
-    }
+  mutation DeleteProduct($_id: ID!) {
+    deleteProduct(_id: $_id)
   }
 `;
