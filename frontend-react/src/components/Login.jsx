@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
+
 import { 
   Container, 
   Paper, 
@@ -11,7 +12,7 @@ import {
   Alert 
 } from '@mui/material';
 import { LOGIN } from '../graphql/authentication';
-import jwtDecode from 'jwt-decode'; // Thêm thư viện để giải mã JWT
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const navigate = useNavigate();
