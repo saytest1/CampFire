@@ -26,8 +26,8 @@ import Cart from './components/Cart';
 import Checkout from './components/Checkout';
 import MyRentals from './components/MyRentals';
 import OrderHistory from './components/OrderHistory';
+import AdminDashboard from './components/admin/Dashboard';
 
-// Create or import your theme
 const theme = createTheme({
   palette: {
     primary: {
@@ -98,7 +98,6 @@ function App() {
           <Route path="/" element={<Login />} />
           {/* Routes với layout */}
           <Route element={<DashboardLayout />}>
-            {/* Route trực tiếp đến Categories để test */}
             <Route path="/home" element={<HomePage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/categories" element={<Categories />} />
@@ -112,8 +111,7 @@ function App() {
             <Route path="/my-rentals" element={<MyRentals />} />
             <Route path="/order-history" element={<OrderHistory />} />
           </Route>
-          
-          {/* Redirect mặc định */}
+          <Route path="/components/admin/Dashboard" element={<AdminDashboard />} />      
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
