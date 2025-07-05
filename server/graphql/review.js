@@ -55,6 +55,7 @@ export const typeDef = `
             orderBy: [ReviewsOrderBy!] = ID_ASC
         ): ReviewConnection
         review(_id: ID!): Review
+        reviewByProductIdCustomerId(productId: ID!, customerId: ID!): Review
     }
 
     extend type Mutation {
@@ -72,6 +73,10 @@ export const resolvers = {
                 nodes: items,
                 totalCount: totalCount,
             };
+        },
+        reviewByProductIdCustomerId: async (parent, args, context, info) => {
+            const review = await context.db.reviews.findByProductIdCustomerId(args.productId, args.customerId);
+            return review;
         },
     },
     Mutation: {

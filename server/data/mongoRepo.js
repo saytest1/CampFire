@@ -105,38 +105,10 @@ const db = {
         totalCount: totalCount,
       };
     },
-    getAllByCategory: async ({ categoryId, first, offset, orderBy, condition }) => {
-      const query = {}
-
-      if (condition) {
-        if (condition.name) {
-          query.name = { $regex: condition.name, $options: "i" };
-        }
-
-        if (condition.price) {
-          query.price = { $gte: condition.price.min, $lte: condition.price.max };
-        }
-      }
-
-      const columns = {
-        ID: "_id",
-        NAME: "name",
-        PRICE: "price",
-      };
-
-      const options = buildOptions(orderBy, columns);
-
-      const totalCount = await Product.find(query).sort(options).countDocuments();
-      if (offset >= totalCount) {
-        offset = 0;
-      }
-
-      const items = await Product.find(query).sort(options).skip(offset).limit(first);
-
-      return {
-        items: items,
-        totalCount: totalCount,
-      };
+    getAllByCategory: async ({ categoryId }) => {
+      const query = { categoryId: new mongoose.Types.ObjectId(categoryId) };
+      const items = await Product.find(query);
+      return items;
     },
     create: async ({ name, price, categoryId, manufacturerId }) => {
       const created = await Product.create({
@@ -259,9 +231,9 @@ const db = {
 
   // reviews
   reviews: {
-    getAll: async () => {
-      const items = await Review.find();
-      return items;
+    findByProductIdCustomerId: async (productId, customerId) => {
+      const review = await Review.findByProductIdCustomerId(productId, customerId);
+      return review;
     },
     create: async ({ customerId, productId, rating, comment }) => {
       const created = await Review.create({ customerId, productId, rating, comment });

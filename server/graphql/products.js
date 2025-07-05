@@ -75,10 +75,10 @@ export const resolvers = {
             return context.db.products.findById(args._id);
         },
         productsByCategory: async (parent, args, context, info) => {
-            const { items, totalCount } = await context.db.products.getAllByCategory(args);
+            const items = await context.db.products.getAllByCategory(args);
             return {
                 nodes: items,
-                totalCount: totalCount,
+                totalCount: items.length,
             };
         },
     },

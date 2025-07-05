@@ -30,4 +30,12 @@ export const ReviewSchema = new Schema(
     }
 );
 
+ReviewSchema.statics.findByProductIdCustomerId = function(productId, customerId) {
+    return this.findOne({
+        productId: mongoose.Types.ObjectId(productId),
+        customerId: mongoose.Types.ObjectId(customerId)
+    });
+};
+
 export const Review = mongoose.model("review", ReviewSchema);
+
