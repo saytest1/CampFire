@@ -92,10 +92,9 @@ function App() {
       <CssBaseline />
       <Router>
         <Routes>
-          {/* Routes không cần layout */}
-          {/* <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/reset-password" element={<ResetPassword />} /> */}
+          <Route path="/reset-password" element={<ResetPassword />} />
           
           {/* Routes với layout */}
           <Route element={<DashboardLayout />}>
