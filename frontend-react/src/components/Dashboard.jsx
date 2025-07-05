@@ -23,12 +23,6 @@ const Dashboard = () => {
 
   const features = [
     {
-      name: 'Trang chính',
-      icon: <HomeIcon fontSize="large" color="primary" />,
-      description: 'Khám phá giao diện bắt đầu',
-      route: '/',
-    },
-    {
       name: 'Giỏ hàng',
       icon: <ShoppingCartIcon fontSize="large" color="secondary" />,
       description: 'Xem giỏ hàng hiện tại của bạn',
