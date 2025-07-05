@@ -1,6 +1,6 @@
 export const typeDef = `
     type Category {
-        id: Int!
+        _id: ID!
         name: String! 
     } 
 
@@ -9,36 +9,57 @@ export const typeDef = `
     }
 
     extend type Query {
-        categories: [Category]
-        category(id: Int!): Category
+        categories(
+          first: Int
+          offset: Int
+          orderBy: [CategoriesOrderBy!] = ID_ASC
+        ): CategoryConnection
+        category(_id: ID!): Category
     }
 
     extend type Mutation {
         createCategory(input: CategoryInput!): Category
-        updateCategory(id: Int!, input: CategoryInput!): Category
-        deleteCategory(id: Int!): Int
+        updateCategory(_id: ID!, input: CategoryInput!): Category
+        deleteCategory(_id: ID!): Int
     }
+
+    enum CategoriesOrderBy {
+        ID_ASC
+        ID_DESC
+        NAME_ASC
+        NAME_DESC
+    }
+
+    type CategoryConnection {
+        nodes: [Category]
+        totalCount: Int
+    }
+
 `;
 
 export const resolvers = {
   Query: {
-    categories: (parent, args, context, info) => {
-      return context.db.categories.getAll();
+    categories: async (parent, args, context, info) => {
+      const { items, totalCount } = await context.db.categories.getAll(args);
+      return {
+        nodes: items,
+        totalCount: totalCount,
+      };
     },
     category: (parent, args, context, info) => {
-      return context.db.categories.findById(args.id);
+      return context.db.categories.findById(args._id);
     },
   },
 
   Mutation: {
     createCategory: (parent, args, context, info) => {
-      return context.db.categories.create(args.input.name);
+      return context.db.categories.create(args.input);
     },
     updateCategory: (parent, args, context, info) => {
-      return context.db.categories.update(args.id, args.input);
+      return context.db.categories.updateById(args._id, args.input);
     },
     deleteCategory: (parent, args, context, info) => {
-      return context.db.categories.deleteById(args.id);
+      return context.db.categories.deleteById(args._id);
     },
   },
 };

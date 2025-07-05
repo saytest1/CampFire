@@ -1,6 +1,6 @@
 export const typeDef = `
     type Manufacturer {
-        id: Int!
+        _id: ID!
         name: String!
     }
 
@@ -10,13 +10,13 @@ export const typeDef = `
 
     extend type Query {
         manufacturers: [Manufacturer]
-        manufacturer(id: Int!): Manufacturer
+        manufacturer(_id: ID!): Manufacturer
     }
 
     extend type Mutation {
         createManufacturer(input: ManufacturerInput!): Manufacturer
-        updateManufacturer(id: Int!, input: ManufacturerInput!): Manufacturer
-        deleteManufacturer(id: Int!): Int
+        updateManufacturer(_id: ID!, input: ManufacturerInput!): Manufacturer
+        deleteManufacturer(_id: ID!): Int
     }
 `;
 
@@ -26,7 +26,7 @@ export const resolvers = {
             return context.db.manufacturers.getAll();
         },
         manufacturer: (parent, args, context, info) => {
-            return context.db.manufacturers.findById(args.id);
+            return context.db.manufacturers.findById(args._id);
         },
     },
     Mutation: {
@@ -34,10 +34,10 @@ export const resolvers = {
             return context.db.manufacturers.create(args.input);
         },
         updateManufacturer: (parent, args, context, info) => {
-            return context.db.manufacturers.update(args.id, args.input);
+            return context.db.manufacturers.updateById(args._id, args.input);
         },
         deleteManufacturer: (parent, args, context, info) => {
-            return context.db.manufacturers.delete(args.id);
+            return context.db.manufacturers.deleteById(args._id);
         },
     },
 };

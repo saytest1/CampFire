@@ -16,7 +16,8 @@ Welcome to **CampFire** – Your Ultimate Outdoor Gear Destination!
 1. Open project.
 2. Open new Terminal
 3. cd api-server
-4. type: `npm start`
+4. type: `docker start 5f0ed0a4245d` to start mongo container
+5. type: `npm start`
 
 ## How to run front-end:
 1. Open project.
