@@ -36,17 +36,16 @@ export const GET_PRODUCTS_BY_CATEGORY = gql`
   }
 `;
 
-export const GET_PRODUCT_BY_ID = gql`
-  query GetProductById($id: ID!) {
-    product(_id: $id) {
-      _id
-      name
-      price
-      categoryId
-      categoryName
-      manufacturerId
-      manufacturerName
-      imageUrl
+export const GET_PRODUCTS_BY_CATEGORY_WITH_PAGINATION = gql`
+  query ProductsByCategory($categoryId: ID!) {
+    productsByCategory(categoryId: $categoryId) {
+      nodes {
+        _id
+        name
+        price
+        imageUrl
+      }
+      totalCount
     }
   }
 `;

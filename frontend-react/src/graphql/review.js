@@ -15,6 +15,20 @@ export const GET_ALL_REVIEWS = gql`
   }
 `;
 
+export const GET_REVIEW_BY_PRODUCT_ID_CUSTOMER_ID = gql`
+
+    query GetReviewByProductIdCustomerId($productId: ID!, $customerId: ID!) {
+        reviewByProductIdCustomerId(productId: $productId, customerId: $customerId) {
+            _id
+            customerId
+            productId
+            rating
+            comment
+            imageFile
+        }
+    }
+`;
+
 export const CREATE_REVIEW = gql`
     mutation CreateReview($input: CreateReviewInput!) {
         createReview(input: $input) {
