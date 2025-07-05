@@ -18,7 +18,7 @@
     "express": "^5.1.0",
     "graphql": "^16.11.0",
     "graphql-middleware": "^6.1.35",
-    "graphql-yoga": "^5.13.5",
+    "graphql-yoga": "^5.14.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mongodb": "^6.17.0",
