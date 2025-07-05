@@ -4,6 +4,7 @@ import { Manufacturer } from "./models/index.js";
 import { Detail } from "./models/index.js";
 import { Order } from "./models/index.js";
 import { User } from "./models/index.js";
+import { Review } from "./models/index.js";
 
 const values = {
   ASC: 1,
@@ -218,6 +219,29 @@ const db = {
     },
     deleteById: async (id) => {
       const deleted = await Order.findByIdAndDelete(id);
+      return deleted;
+    },
+  },
+
+  // reviews
+  reviews: {
+    getAll: async () => {
+      const items = await Review.find();
+      return items;
+    },
+    create: async ({ customerId, productId, rating, comment }) => {
+      const created = await Review.create({ customerId, productId, rating, comment });
+      return created;
+    },
+    updateById: async (id, { customerId, productId, rating, comment }) => {
+      const updated = await Review.findByIdAndUpdate(id, { customerId, productId, rating, comment }, { new: true });
+      if (updated != null) {
+        return await Review.findById(id);
+      }
+      return updated;
+    },
+    deleteById: async (id) => {
+      const deleted = await Review.findByIdAndDelete(id);
       return deleted;
     },
   },
