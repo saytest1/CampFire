@@ -27,8 +27,8 @@ const Login = () => {
     e.preventDefault();
     // Xử lý đăng nhập ở đây
     console.log('Đăng nhập với:', formData);
-    // Sau khi đăng nhập thành công, chuyển đến dashboard
-    navigate('/dashboard');
+    // Sau khi đăng nhập thành công, chuyển đến home
+    navigate('/home');
   };
 
   return (
