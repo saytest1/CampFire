@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 
 // Create Apollo Client
 const httpLink = createHttpLink({
-  uri: 'https://fictional-giggle-v6vx7qvq9gwg369-4000.app.github.dev/', // Adjust this URL to match your GraphQL server
+  uri: 'https://ubiquitous-space-couscous-rv9wpv9w6p9fpj77-4000.app.github.dev/', // Adjust this URL to match your GraphQL server
 });
 
 const client = new ApolloClient({
