@@ -13,6 +13,7 @@ dotenv.config({ path: resolve(__dirname, "../.env") });
 export const typeDef = `
     type LoginResult {
         jwt: String!
+        role: String!
     }
 
     type LoginResponse {
@@ -69,6 +70,7 @@ export const resolvers = {
           message: "Login successfully",
           data: {
             jwt: token,
+            role: user.role,
           },
         };
       }
