@@ -5,28 +5,32 @@ import CssBaseline from '@mui/material/CssBaseline';
 import './App.css';
 
 // Import Layout
-import DashboardLayout from './components/DashboardLayout';
+import DashboardLayout from './pages/DashboardLayout';
 
 // Import các components không cần layout
-import StartPage from './components/StartPage';
-import Login from './components/Login';
-import Register from './components/Register';
-import ResetPassword from './components/ResetPassword';
+import StartPage from './pages/StartPage';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import ResetPassword from './pages/ResetPassword';
 
 // Import các components cần layout
-import HomePage from './components/HomePage';
-import Dashboard from './components/Dashboard';
-import Categories from './components/Categories';
-import Products from './components/Products';
-import ProductDetail from './components/ProductDetail';
-import EquipmentDetail from './components/EquipmentDetail';
-import BookingForm from './components/BookingForm';
-import PaymentForm from './components/PaymentForm';
-import Cart from './components/Cart';
-import Checkout from './components/Checkout';
-import MyRentals from './components/MyRentals';
-import OrderHistory from './components/OrderHistory';
-import AdminDashboard from './components/admin/Dashboard';
+import HomePage from './pages/HomePage';
+import Dashboard from './pages/Dashboard';
+import Categories from './pages/Categories';
+import Products from './pages/Products';
+import ProductDetail from './pages/ProductDetail';
+import EquipmentDetail from './pages/EquipmentDetail';
+import BookingForm from './pages/BookingForm';
+import PaymentForm from './pages/PaymentForm';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import MyRentals from './pages/MyRentals';
+import OrderHistory from './pages/OrderHistory';
+import AdminDashboard from './pages/admin/Dashboard';
+import AdminProductImageUpload from './pages/admin/AdminProductImageUpload';
+
+// Components
+import NavBar from './components/NavBar';
 
 const theme = createTheme({
   palette: {
@@ -95,10 +99,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/" element={<Login />} />
           {/* Routes với layout */}
           <Route element={<DashboardLayout />}>
             {/* Route trực tiếp đến Categories để test */}
+            <Route path="/" element={<HomePage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/categories" element={<Categories />} />
@@ -114,7 +118,8 @@ function App() {
           </Route>
           
           {/* Redirect mặc định */}
-          <Route path="/components/admin/Dashboard" element={<AdminDashboard />} />      
+          <Route path="/components/admin/Dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/upload-image" element={<AdminProductImageUpload />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
