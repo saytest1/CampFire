@@ -115,11 +115,14 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/my-rentals" element={<MyRentals />} />
             <Route path="/order-history" element={<OrderHistory />} />
+            <Route path="/products/:productId/review" element={<ReviewList/>} />
+            <Route path="/products/:productId/review/new" element={<ReviewForm/>} />
           </Route>
           
           {/* Redirect mặc định */}
           <Route path="/components/admin/Dashboard" element={<AdminDashboard />} />
           <Route path="/admin/upload-image" element={<AdminProductImageUpload />} />
+          <Route path="/admin/reviews/:productId" element={<AdminReviewManagement productId={productId} client={apolloClient} />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
