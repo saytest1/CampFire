@@ -20,6 +20,7 @@ import {
   ImageListItem
 } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
@@ -28,7 +29,7 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import SecurityIcon from '@mui/icons-material/Security';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import IconButton from '@mui/material/IconButton';
-
+import { GET_ALL_REVIEWS } from '../graphql/review.js'; // Sửa đường dẫn
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -38,6 +39,11 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+
+  // Query để lấy đánh giá theo productId
+  const { loading, error, data } = useQuery(GET_ALL_REVIEWS, {
+    variables: { productId: id }, // Lọc theo productId
+  });
 
   // Dữ liệu sản phẩm mẫu
   const product = {
@@ -329,9 +335,42 @@ const ProductDetail = () => {
           )}
           
           {tabValue === 2 && (
-            <Typography variant="body1">
-              Chức năng đánh giá sẽ được cập nhật sau...
-            </Typography>
+            <Box>
+              {loading && <Typography variant="body1">Đang tải đánh giá...</Typography>}
+              {error && <Typography variant="body1" color="error">Lỗi khi tải đánh giá: {error.message}</Typography>}
+              {!loading && !error && data?.reviews?.nodes?.length === 0 && (
+                <Typography variant="body1">Chưa có đánh giá nào cho sản phẩm này.</Typography>
+              )}
+              {!loading && !error && data?.reviews?.nodes?.length > 0 && (
+                <List>
+                  {data.reviews.nodes.map((review) => (
+                    <Box key={review._id} sx={{ mb: 2, p: 2, border: '1px solid', borderColor: 'grey.300', borderRadius: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                        <Rating value={review.rating} precision={0.5} readOnly />
+                        <Typography variant="body2" sx={{ ml: 1 }}>
+                          {review.rating}/5
+                        </Typography>
+                      </Box>
+                      <Typography variant="body1" paragraph>
+                        {review.comment}
+                      </Typography>
+                      {review.imageFile && (
+                        <Box sx={{ mb: 1 }}>
+                          <img
+                            src={review.imageFile}
+                            alt="Review"
+                            style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover', borderRadius: '4px' }}
+                          />
+                        </Box>
+                      )}
+                      <Typography variant="caption" color="text.secondary">
+                        Đánh giá bởi khách hàng #{review.customerId}
+                      </Typography>
+                    </Box>
+                  ))}
+                </List>
+              )}
+            </Box>
           )}
         </Box>
       </Box>
