@@ -17,13 +17,9 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useQuery, useMutation } from '@apollo/client';
-import {
-  GET_ALL_REVIEWS,
-  DELETE_REVIEW,
-  UPDATE_REVIEW
-} from '../../graphql/reviews';
+import { GET_ALL_REVIEWS, DELETE_REVIEW, UPDATE_REVIEW } from "../../graphql/review";
 
-export default function AdminReviewManagement() {
+export default function ReviewManagement() {
   const { data, loading, error, refetch } = useQuery(GET_ALL_REVIEWS, {
     variables: { first: 100, offset: 0 }
   });

@@ -14,9 +14,9 @@ import {
   GET_REVIEW_BY_PRODUCT_ID_CUSTOMER_ID,
   CREATE_REVIEW,
   UPDATE_REVIEW
-} from '../../graphql/reviews';
+} from '../graphql/review';
 
-export default function CustomerReviewForm({ productId, customerId }) {
+export default function ReviewForm({ productId, customerId }) {
   const { data, loading: qLoading, error: qError } = useQuery(
     GET_REVIEW_BY_PRODUCT_ID_CUSTOMER_ID,
     { variables: { productId, customerId } }

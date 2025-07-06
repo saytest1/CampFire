@@ -10,9 +10,9 @@ import {
   Alert
 } from '@mui/material';
 import { useQuery } from '@apollo/client';
-import { GET_ALL_REVIEWS } from '../../graphql/reviews';
+import { GET_ALL_REVIEWS } from '../graphql/review';
 
-export default function GuestReviewList({ productId }) {
+export default function ReviewList({ productId }) {
   const { data, loading, error } = useQuery(GET_ALL_REVIEWS, {
     variables: { first: 100, offset: 0 }
   });
