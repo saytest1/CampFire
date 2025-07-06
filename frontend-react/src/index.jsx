@@ -6,7 +6,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/',
+  uri: 'https://fictional-giggle-v6vx7qvq9gwg369-4000.app.github.dev/',
 });
 
 const client = new ApolloClient({
