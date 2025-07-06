@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { 
   Container, 
@@ -15,6 +15,9 @@ import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isAdminLogin = location.pathname === '/admin/login';
+  
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -66,18 +69,29 @@ const Login = () => {
 
               if (role) {
                 localStorage.setItem('userRole', role);
-                switch (role) {
-                  case 'admin':
-                    navigate('/products');
-                    break;
-                  case 'manager':
-                    navigate('/products');
-                    break;
-                  case 'customer':
-                    navigate('/home');
-                    break;
-                  default:
-                    setError('Vai trò không hợp lệ');
+                
+                // Handle admin login specifically
+                if (isAdminLogin) {
+                  if (role === 'admin' || role === 'manager') {
+                    navigate('/admin');
+                  } else {
+                    setError('Access denied. Admin privileges required.');
+                  }
+                } else {
+                  // Regular user login
+                  switch (role) {
+                    case 'admin':
+                      navigate('/admin');
+                      break;
+                    case 'manager':
+                      navigate('/admin');
+                      break;
+                    case 'customer':
+                      navigate('/home');
+                      break;
+                    default:
+                      setError('Vai trò không hợp lệ');
+                  }
                 }
               } else {
                 console.error('Role not found in JWT payload');
@@ -109,7 +123,7 @@ const Login = () => {
       <Box sx={{ mt: 8 }}>
         <Paper elevation={3} sx={{ p: 4 }}>
           <Typography component="h1" variant="h5" align="center">
-            Đăng nhập
+            {isAdminLogin ? 'Admin Login' : 'Đăng nhập'}
           </Typography>
           {error && (
             <Alert severity="error" sx={{ mt: 2 }}>
@@ -152,18 +166,20 @@ const Login = () => {
             >
               {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
             </Button>
-            <Box textAlign="center">
-              <Link to="/reset-password" style={{ textDecoration: 'none' }}>
-                <Typography variant="body2" color="primary" gutterBottom>
-                  Quên mật khẩu?
-                </Typography>
-              </Link>
-              <Link to="/register" style={{ textDecoration: 'none' }}>
-                <Typography variant="body2" color="primary">
-                  Chưa có tài khoản? Đăng ký ngay
-                </Typography>
-              </Link>
-            </Box>
+            {!isAdminLogin && (
+              <Box textAlign="center">
+                <Link to="/reset-password" style={{ textDecoration: 'none' }}>
+                  <Typography variant="body2" color="primary" gutterBottom>
+                    Quên mật khẩu?
+                  </Typography>
+                </Link>
+                <Link to="/register" style={{ textDecoration: 'none' }}>
+                  <Typography variant="body2" color="primary">
+                    Chưa có tài khoản? Đăng ký ngay
+                  </Typography>
+                </Link>
+              </Box>
+            )}
           </Box>
         </Paper>
       </Box>

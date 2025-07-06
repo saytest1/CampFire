@@ -26,8 +26,16 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import MyRentals from './pages/MyRentals';
 import OrderHistory from './pages/OrderHistory';
+
+// Admin components
 import AdminDashboard from './pages/admin/Dashboard';
+import AdminProducts from './pages/admin/Products';
+import AdminProductDetail from './pages/admin/ProductDetail';
+import AdminCategories from './pages/admin/Categories';
 import AdminProductImageUpload from './pages/admin/AdminProductImageUpload';
+
+// Admin protection
+import AdminRoute from './components/AdminRoute';
 
 // Components
 import NavBar from './components/NavBar';
@@ -99,9 +107,39 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          
+          {/* Admin login uses the same Login component */}
+          <Route path="/admin/login" element={<Login />} />
+          
+          {/* Admin routes with protection */}
+          <Route path="/admin" element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          } />
+          <Route path="/admin/products" element={
+            <AdminRoute>
+              <AdminProducts />
+            </AdminRoute>
+          } />
+          <Route path="/admin/products/:_id" element={
+            <AdminRoute>
+              <AdminProductDetail />
+            </AdminRoute>
+          } />
+          <Route path="/admin/categories" element={
+            <AdminRoute>
+              <AdminCategories />
+            </AdminRoute>
+          } />
+          <Route path="/admin/upload-image" element={
+            <AdminRoute>
+              <AdminProductImageUpload />
+            </AdminRoute>
+          } />
+          
           {/* Routes với layout */}
           <Route element={<DashboardLayout />}>
-            {/* Route trực tiếp đến Categories để test */}
             <Route path="/" element={<HomePage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/dashboard" element={<Dashboard />} />
@@ -118,8 +156,6 @@ function App() {
           </Route>
           
           {/* Redirect mặc định */}
-          <Route path="/components/admin/Dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/upload-image" element={<AdminProductImageUpload />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>

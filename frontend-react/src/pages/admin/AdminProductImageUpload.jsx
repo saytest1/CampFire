@@ -1,23 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, MenuItem, Select, InputLabel, FormControl, Paper, LinearProgress, Alert } from '@mui/material';
 import { useMutation, useQuery, gql } from '@apollo/client';
-
-const UPLOAD_MUTATION = gql`
-  mutation Upload($file: Upload!) {
-    upload(file: $file)
-  }
-`;
-
-const PRODUCTS_QUERY = gql`
-  query GetProducts {
-    products(first: 100, offset: 0, orderBy: ["ID_ASC"]) {
-      items {
-        _id
-        name
-      }
-    }
-  }
-`;
+import { UPLOAD_MUTATION } from '../../graphql/upload';
+import { GET_ALL_PRODUCTS } from '../../graphql/products';
 
 const AdminProductImageUpload = () => {
   const [selectedProduct, setSelectedProduct] = useState('');
@@ -26,7 +11,7 @@ const AdminProductImageUpload = () => {
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
   const [upload, { loading }] = useMutation(UPLOAD_MUTATION);
-  const { data, loading: loadingProducts, error: errorProducts } = useQuery(PRODUCTS_QUERY);
+  const { data, loading: loadingProducts, error: errorProducts } = useQuery(GET_ALL_PRODUCTS);
 
   const handleProductChange = (e) => {
     setSelectedProduct(e.target.value);

@@ -18,6 +18,21 @@ export const GET_ALL_PRODUCTS = gql`
   }
 `;
 
+export const GET_PRODUCT_BY_ID = gql`
+  query GetProductById($_id: ID!) {
+    product(_id: $_id) {
+      _id
+      name
+      price
+      categoryId
+      categoryName
+      manufacturerId
+      manufacturerName
+      imageUrl
+    }
+  }
+`;
+
 export const GET_PRODUCTS_BY_CATEGORY = gql`
   query GetProductsByCategory($categoryId: ID!, $first: Int, $offset: Int) {
     products(first: $first, offset: $offset, condition: { categoryId: $categoryId }) {
