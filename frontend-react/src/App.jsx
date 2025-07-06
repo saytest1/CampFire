@@ -6,30 +6,6 @@ import './App.css';
 
 // Import Layout
 import DashboardLayout from './components/DashboardLayout';
-<<<<<<< HEAD
-=======
-
-// Import các components không cần layout
-import StartPage from './components/StartPage';
-import Login from './components/Login';
-import Register from './components/Register';
-import ResetPassword from './components/ResetPassword';
-
-// Import các components cần layout
-import HomePage from './components/HomePage';
-import Dashboard from './components/Dashboard';
-import Categories from './components/Categories';
-import Products from './components/Products';
-import ProductDetail from './components/ProductDetail';
-import EquipmentDetail from './components/EquipmentDetail';
-import BookingForm from './components/BookingForm';
-import PaymentForm from './components/PaymentForm';
-import Cart from './components/Cart';
-import Checkout from './components/Checkout';
-import MyRentals from './components/MyRentals';
-import OrderHistory from './components/OrderHistory';
-import AdminDashboard from './components/admin/Dashboard';
->>>>>>> rolando
 
 // Import các components không cần layout
 import StartPage from './components/StartPage';

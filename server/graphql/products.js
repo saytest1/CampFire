@@ -52,10 +52,7 @@ export const typeDef = `
             orderBy: [ProductsOrderBy!] = ID_ASC
         ): ProductConnection
         product(_id: ID!): Product
-<<<<<<< HEAD
         productsByCategory(categoryId: ID!, first: Int, offset: Int): ProductConnection
-=======
->>>>>>> rolando
     }
 
     extend type Mutation {
