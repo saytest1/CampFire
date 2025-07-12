@@ -5,10 +5,12 @@ import CssBaseline from '@mui/material/CssBaseline';
 import './App.css';
 
 import DashboardLayout from './pages/DashboardLayout';
+
 import StartPage from './pages/StartPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
+
 import HomePage from './pages/HomePage';
 import Dashboard from './pages/Dashboard';
 import Categories from './pages/Categories';
@@ -21,11 +23,14 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import MyRentals from './pages/MyRentals';
 import OrderHistory from './pages/OrderHistory';
+
+import ReviewList from './pages/ReviewList';
+import ReviewForm from './pages/ReviewForm';
+
+// Admin
 import AdminDashboard from './pages/admin/Dashboard';
 import AdminProductImageUpload from './pages/admin/AdminProductImageUpload';
 import ReviewManagement from './pages/admin/ReviewManagement';
-import ReviewList from './pages/ReviewList';
-import ReviewForm from './pages/ReviewForm';
 
 const theme = createTheme({
   palette: {
@@ -52,8 +57,7 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          boxShadow:
-            '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+          boxShadow: '0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06)',
         },
       },
     },
@@ -66,16 +70,19 @@ function App() {
       <CssBaseline />
       <Router>
         <Routes>
-          {/* Public routes */}
+
+          {/* 🌐 Public routes */}
+          <Route path="/" element={<Login />} />
           <Route path="/start" element={<StartPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/" element={<Login />} />
-          {/* Routes with DashboardLayout */}
+
+          {/* 🛡️ Protected user/admin routes */}
           <Route element={<DashboardLayout />}>
+            {/* 👤 User routes */}
             <Route path="/home" element={<HomePage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} /> {/* ← người dùng */}
             <Route path="/categories" element={<Categories />} />
             <Route path="/products" element={<Products />} />
             <Route path="/product/:id" element={<ProductDetail />} />
@@ -89,11 +96,13 @@ function App() {
             <Route path="/products/:productId/review" element={<ReviewList />} />
             <Route path="/products/:productId/review/new" element={<ReviewForm />} />
 
-            {/* Admin routes */}
+            {/* 🔐 Admin routes */}
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/upload-image" element={<AdminProductImageUpload />} />
-            <Route path="/admin/reviews/:productId" element={<ReviewManagement />}/>
+            <Route path="/admin/reviews/:productId" element={<ReviewManagement />} />
           </Route>
+
+          {/* ❌ Catch-all */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
